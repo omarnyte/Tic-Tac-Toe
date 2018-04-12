@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-jest": "^22.4.3",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "jest": "^22.4.3",
@@ -20,7 +21,6 @@
     "webpack-cli": "^2.0.14"
   },
   "dependencies": {
-    "babel-loader": "^7.1.4",
     "react": "^16.3.1",
     "react-dom": "^16.3.1"
   }
