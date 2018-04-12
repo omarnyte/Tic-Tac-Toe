@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Scoreboard from './Scoreboard.jsx';
+import Scoreboard from './components/scoreboard/scoreboard.jsx';
 
 
 class Root extends React.Component {
