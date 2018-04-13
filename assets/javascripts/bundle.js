@@ -189,7 +189,7 @@ var Board = function (_React$Component) {
                 'ul',
                 { className: 'board-ul' },
                 this.state.board.map(function (square, idx) {
-                    return _react2.default.createElement(_square2.default, { key: idx, row: Math.floor(idx / 3), col: idx % 3 });
+                    return _react2.default.createElement(_square2.default, { key: idx, idx: idx });
                 })
             );
         }
@@ -199,17 +199,6 @@ var Board = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Board;
-
-
-{/* <ul className="board-ul">
-       {
-           this.state.board.forEach((row, rowIdx) => {
-               // row.map((col, colIdx) => {  
-               return <Square key={rowIdx + colIdx} row={rowIdx} col={colIdx} />
-           })
-       })
-    }
-               </ul> */}
 
 /***/ }),
 
@@ -347,22 +336,23 @@ var Square = function (_React$Component) {
     _createClass(Square, [{
         key: 'render',
         value: function render() {
-            var _props = this.props,
-                col = _props.col,
-                row = _props.row;
+            var idx = this.props.idx;
 
+            var col = idx % 3;
+            var row = Math.floor(idx / 3);
 
             return _react2.default.createElement(
                 'li',
                 {
                     className: 'square-li',
+                    'data-idx': idx,
                     'data-col': col,
                     'data-row': row
                 },
                 _react2.default.createElement(
                     'span',
                     null,
-                    '0'
+                    this.state.mark
                 )
             );
         }

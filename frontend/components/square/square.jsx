@@ -10,15 +10,18 @@ export default class Square extends React.Component {
     }
     
     render() {
-        const {col, row} = this.props;
+        const { idx } = this.props; 
+        const col =  idx % 3;
+        const row = Math.floor(idx / 3);
 
         return (
             <li 
                 className="square-li"
-                data-col={col}
-                data-row={row}
+                data-idx={ idx }
+                data-col={ col }
+                data-row={ row }
             >
-                <span>0</span>
+                <span>{this.state.mark}</span>
             </li>
         );
     }
