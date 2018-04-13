@@ -21,7 +21,7 @@ describe('AI Logic', () => {
     ];
     test('AI picks winning move (if possible)', () => {
         expect(AILogic.move(cBefore).toBe(cAfter))
-    });sy
+    });
 
     const dBefore = [
         null, null, 'O',

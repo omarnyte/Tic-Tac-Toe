@@ -10,17 +10,36 @@ export default class Board extends React.Component {
                 null, null, null,
                 null, null, null,
                 null, null, null
-            ]
+            ],
+            currentPlayer: 'human'
         }
+        this.switchPlayer = this.switchPlayer.bind(this);
+    }
+
+    handleClick(e) {
+        console.log(`target! ${e.target.text}`);
+    }
+    
+    switchPlayer() {
+        const currentPlayer = (this.state.currentPlayer === 'human' ? 'ai' : 'human');
+        this.state = { currentPlayer };
     }
 
     render() {
-
+        const { board } = this.state;
+        
         return (
-            <ul className="board-ul">
+            <ul 
+                className="board-ul"
+            >
                 {
-                    this.state.board.map((square, idx) => {
-                        return <Square key={ idx } idx={ idx } />
+                    board.map((square, idx) => {
+                        return <Square 
+                            key={ idx } 
+                            idx={ idx } 
+                            mark={ board[idx] }
+                            onClick = { this.handleClick }
+                        />
                     })
                 }
             </ul>

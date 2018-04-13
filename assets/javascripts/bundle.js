@@ -176,20 +176,44 @@ var Board = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
 
         _this.state = {
-            board: [null, null, null, null, null, null, null, null, null]
+            board: [null, null, null, null, null, null, null, null, null],
+            currentPlayer: 'human'
         };
+        _this.switchPlayer = _this.switchPlayer.bind(_this);
         return _this;
     }
 
     _createClass(Board, [{
+        key: 'handleClick',
+        value: function handleClick(e) {
+            console.log('target! ' + e.target.text);
+        }
+    }, {
+        key: 'switchPlayer',
+        value: function switchPlayer() {
+            var currentPlayer = this.state.currentPlayer === 'human' ? 'ai' : 'human';
+            this.state = { currentPlayer: currentPlayer };
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
+            var board = this.state.board;
+
 
             return _react2.default.createElement(
                 'ul',
-                { className: 'board-ul' },
-                this.state.board.map(function (square, idx) {
-                    return _react2.default.createElement(_square2.default, { key: idx, idx: idx });
+                {
+                    className: 'board-ul'
+                },
+                board.map(function (square, idx) {
+                    return _react2.default.createElement(_square2.default, {
+                        key: idx,
+                        idx: idx,
+                        mark: board[idx],
+                        onClick: _this2.handleClick
+                    });
                 })
             );
         }
@@ -327,13 +351,19 @@ var Square = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).call(this, props));
 
         _this.state = {
-            selected: false,
-            mark: ''
+            selected: false
         };
+        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
 
     _createClass(Square, [{
+        key: 'handleClick',
+        value: function handleClick(e) {
+            var mark = 'X';
+            this.setState({ mark: mark });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var idx = this.props.idx;
@@ -347,13 +377,10 @@ var Square = function (_React$Component) {
                     className: 'square-li',
                     'data-idx': idx,
                     'data-col': col,
-                    'data-row': row
+                    'data-row': row,
+                    onClick: this.props.handleClick
                 },
-                _react2.default.createElement(
-                    'span',
-                    null,
-                    this.state.mark
-                )
+                this.props.mark
             );
         }
     }]);
