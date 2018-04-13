@@ -21,7 +21,8 @@ export default class Square extends React.Component {
                 data-row={ row }
                 onClick={ this.props.onClick }
             >
-                { this.props.mark }
+                <span>{this.props.mark}</span>
+                
             </li>
         );
     }

@@ -110,20 +110,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Root = function (_React$Component) {
     _inherits(Root, _React$Component);
 
-    function Root() {
+    function Root(props) {
         _classCallCheck(this, Root);
 
-        return _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).call(this, props));
+
+        _this.state = {
+            AIScore: 0,
+            humanScore: 0
+        };
+        _this.updateScore = _this.updateScore.bind(_this);
+        return _this;
     }
 
     _createClass(Root, [{
+        key: 'updateScore',
+        value: function updateScore(winner) {
+            var _state = this.state,
+                AIScore = _state.AIScore,
+                humanScore = _state.humanScore;
+
+            if (winner === 'human') {
+                humanScore += 1;
+            } else {
+                AIScore += 1;
+            }
+            this.setState({ AIScore: AIScore, humanScore: humanScore });
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _state2 = this.state,
+                AIScore = _state2.AIScore,
+                humanScore = _state2.humanScore;
+
+
             return _react2.default.createElement(
                 'div',
                 { className: 'root-div' },
-                _react2.default.createElement(_board2.default, null),
-                _react2.default.createElement(_scoreboard2.default, null)
+                _react2.default.createElement(_board2.default, { onWin: this.updateScore }),
+                _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore })
             );
         }
     }]);
@@ -196,8 +222,13 @@ var Board = function (_React$Component) {
 
             board[squareIdx] = 'X';
             var currentPlayer = this.state.currentPlayer === 'human' ? 'AI' : 'human';
-            this.setState({ board: board, currentPlayer: currentPlayer });
-            this.switchPlayer();
+            if (isWinningMove(board)) {
+                this.props.onWin(this.state.currentPlayer);
+                return;
+            } else {
+                this.switchPlayer();
+                this.setState({ board: board, currentPlayer: currentPlayer });
+            }
         }
     }, {
         key: 'makeMove',
@@ -212,9 +243,15 @@ var Board = function (_React$Component) {
                 var rand = Math.floor(Math.random() * 9);
                 if (!board[rand]) {
                     board[rand] = 'O';
-                    this.switchPlayer();
-                    return;
+                    break;
                 }
+            }
+
+            if (isWinningMove(board)) {
+                this.props.onWin(this.state.currentPlayer);
+                return;
+            } else {
+                this.switchPlayer();
             }
         }
     }, {
@@ -315,13 +352,7 @@ var Scoreboard = function (_React$Component) {
     function Scoreboard(props) {
         _classCallCheck(this, Scoreboard);
 
-        var _this = _possibleConstructorReturn(this, (Scoreboard.__proto__ || Object.getPrototypeOf(Scoreboard)).call(this, props));
-
-        _this.state = {
-            userScore: 0,
-            AIScore: 0
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (Scoreboard.__proto__ || Object.getPrototypeOf(Scoreboard)).call(this, props));
     }
 
     _createClass(Scoreboard, [{
@@ -341,7 +372,7 @@ var Scoreboard = function (_React$Component) {
                     _react2.default.createElement(
                         "span",
                         { className: "player-score" },
-                        this.state.userScore
+                        this.props.humanScore
                     )
                 ),
                 _react2.default.createElement(
@@ -355,7 +386,7 @@ var Scoreboard = function (_React$Component) {
                     _react2.default.createElement(
                         "span",
                         { className: "AI-score" },
-                        this.state.AIScore
+                        this.props.AIScore
                     )
                 )
             );
@@ -428,7 +459,11 @@ var Square = function (_React$Component) {
                     "data-row": row,
                     onClick: this.props.onClick
                 },
-                this.props.mark
+                _react2.default.createElement(
+                    "span",
+                    null,
+                    this.props.mark
+                )
             );
         }
     }]);

@@ -25,8 +25,13 @@ export default class Board extends React.Component {
 
         board[squareIdx] = 'X';
         const currentPlayer = (this.state.currentPlayer === 'human' ? 'AI' : 'human');
-        this.setState({ board, currentPlayer });
-        this.switchPlayer();
+        if (isWinningMove(board)) {
+            this.props.onWin(this.state.currentPlayer);
+            return;
+        } else {
+            this.switchPlayer();
+            this.setState({ board, currentPlayer });
+        }
     }
 
     makeMove() {
@@ -38,9 +43,15 @@ export default class Board extends React.Component {
             const rand = Math.floor(Math.random() * 9);
             if (!board[rand]) {
                 board[rand] = 'O';
-                this.switchPlayer();
-                return;
+                break;
             }
+        }
+        
+        if (isWinningMove(board)) {
+            this.props.onWin(this.state.currentPlayer);
+            return;
+        } else {
+            this.switchPlayer();
         }
     }
 
@@ -48,6 +59,7 @@ export default class Board extends React.Component {
         const currentPlayer = (this.state.currentPlayer === 'human' ? 'AI' : 'human');
         this.setState({ currentPlayer })
     }
+
 
     render() {
         const { board, currentPlayer } = this.state;
