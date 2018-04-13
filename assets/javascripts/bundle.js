@@ -175,20 +175,21 @@ var Board = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
 
-        _this.renderSquares = _this.renderSquares.bind(_this);
+        _this.state = {
+            board: [null, null, null, null, null, null, null, null, null]
+        };
         return _this;
     }
 
     _createClass(Board, [{
         key: 'render',
         value: function render() {
-            var grid = new Array(9).fill(0);
 
             return _react2.default.createElement(
                 'ul',
                 { className: 'board-ul' },
-                grid.map(function (zero, idx) {
-                    return _react2.default.createElement(_square2.default, { key: idx });
+                this.state.board.map(function (square, idx) {
+                    return _react2.default.createElement(_square2.default, { key: idx, row: Math.floor(idx / 3), col: idx % 3 });
                 })
             );
         }
@@ -198,6 +199,17 @@ var Board = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Board;
+
+
+{/* <ul className="board-ul">
+       {
+           this.state.board.forEach((row, rowIdx) => {
+               // row.map((col, colIdx) => {  
+               return <Square key={rowIdx + colIdx} row={rowIdx} col={colIdx} />
+           })
+       })
+    }
+               </ul> */}
 
 /***/ }),
 
@@ -320,20 +332,38 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Square = function (_React$Component) {
     _inherits(Square, _React$Component);
 
-    function Square() {
+    function Square(props) {
         _classCallCheck(this, Square);
 
-        return _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).call(this, props));
+
+        _this.state = {
+            selected: false,
+            mark: ''
+        };
+        return _this;
     }
 
     _createClass(Square, [{
-        key: "render",
+        key: 'render',
         value: function render() {
+            var _props = this.props,
+                col = _props.col,
+                row = _props.row;
+
+
             return _react2.default.createElement(
-                "li",
-                { className: "square-li" },
-                "in a square ",
-                this.props.num
+                'li',
+                {
+                    className: 'square-li',
+                    'data-col': col,
+                    'data-row': row
+                },
+                _react2.default.createElement(
+                    'span',
+                    null,
+                    '0'
+                )
             );
         }
     }]);

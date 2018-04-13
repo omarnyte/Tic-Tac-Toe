@@ -1,0 +1,14 @@
+.board-ul {
+    height: 155px;
+    width: 160px; 
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.square-li {
+    height: 32%; 
+    width: 32%;
+
+    border: 1px solid black;
+}
