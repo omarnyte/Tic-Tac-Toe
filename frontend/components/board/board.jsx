@@ -88,8 +88,8 @@ export default class Board extends React.Component {
 } 
 
 function isWinningMove(board) {
-    // const numMarks = board.filter(square => square !== null).length;
-    // if (numMarks < 6) return false;    
+    const numMarks = board.filter(square => square !== null).length;
+    if (numMarks < 6) return false;    
 
     const winningIndeces = [
         [0, 1, 2],
