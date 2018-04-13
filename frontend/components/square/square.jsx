@@ -21,7 +21,7 @@ export default class Square extends React.Component {
                 data-col={ col }
                 data-row={ row }
             >
-                <span>{this.state.mark}</span>
+                <span>{ this.state.mark }</span>
             </li>
         );
     }

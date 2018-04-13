@@ -1,6 +1,7 @@
-import Scoreboard from '../Scoreboard.jsx';
 import React from 'react';
 import { mount } from 'enzyme';
+
+import Scoreboard from '../Scoreboard.jsx';
 
 describe('Scoreboard component', () => {
     describe('tracking scores', () => {

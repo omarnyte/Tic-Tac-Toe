@@ -20,7 +20,7 @@ export default class Board extends React.Component {
             <ul className="board-ul">
                 {
                     this.state.board.map((square, idx) => {
-                        return <Square key={idx} idx={idx} />
+                        return <Square key={ idx } idx={ idx } />
                     })
                 }
             </ul>
