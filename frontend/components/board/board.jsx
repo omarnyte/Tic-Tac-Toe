@@ -13,20 +13,47 @@ export default class Board extends React.Component {
             ],
             currentPlayer: 'human'
         }
-        this.switchPlayer = this.switchPlayer.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.makeMove = this.makeMove.bind(this);
     }
 
-    handleClick(e) {
-        console.log(`target! ${e.target.text}`);
+    handleClick(e) {    
+        const squareIdx = e.target.dataset.idx;
+        const board = this.state.board;
+        
+        if (board[squareIdx]) return;
+
+        board[squareIdx] = 'X';
+        const currentPlayer = (this.state.currentPlayer === 'human' ? 'AI' : 'human');
+        this.setState({ board, currentPlayer });
+        this.switchPlayer();
     }
-    
+
+    makeMove() {
+        const board = this.state.board;
+
+        if (board.filter(square => square !== null).length >= 9) return;
+        
+        while (true) {
+            const rand = Math.floor(Math.random() * 9);
+            if (!board[rand]) {
+                board[rand] = 'O';
+                this.switchPlayer();
+                return;
+            }
+        }
+    }
+
     switchPlayer() {
-        const currentPlayer = (this.state.currentPlayer === 'human' ? 'ai' : 'human');
-        this.state = { currentPlayer };
+        const currentPlayer = (this.state.currentPlayer === 'human' ? 'AI' : 'human');
+        this.setState({ currentPlayer })
     }
 
     render() {
-        const { board } = this.state;
+        const { board, currentPlayer } = this.state;
+        if (currentPlayer === 'AI') {
+            this.makeMove();
+        }
         
         return (
             <ul 
@@ -47,3 +74,28 @@ export default class Board extends React.Component {
     }
 
 } 
+
+function isWinningMove(board) {
+    // const numMarks = board.filter(square => square !== null).length;
+    // if (numMarks < 6) return false;    
+
+    const winningIndeces = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+
+    for (let i = 0; i < winningIndeces.length; i++) {
+        const [first, second, third] = winningIndeces[i];
+        if (board[first] && board[first] === board[second] && board[second] === board[third]) {
+            return true;
+        }
+    }
+
+    return false;
+}

@@ -6,12 +6,6 @@ export default class Square extends React.Component {
         this.state = {
             selected: false,
         }
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(e) {
-        const mark = 'X';
-        this.setState({ mark });
     }
     
     render() {
@@ -25,7 +19,7 @@ export default class Square extends React.Component {
                 data-idx={ idx }
                 data-col={ col }
                 data-row={ row }
-                onClick={ this.props.handleClick }
+                onClick={ this.props.onClick }
             >
                 { this.props.mark }
             </li>

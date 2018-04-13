@@ -149,6 +149,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -179,28 +181,60 @@ var Board = function (_React$Component) {
             board: [null, null, null, null, null, null, null, null, null],
             currentPlayer: 'human'
         };
-        _this.switchPlayer = _this.switchPlayer.bind(_this);
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.makeMove = _this.makeMove.bind(_this);
         return _this;
     }
 
     _createClass(Board, [{
         key: 'handleClick',
         value: function handleClick(e) {
-            console.log('target! ' + e.target.text);
+            var squareIdx = e.target.dataset.idx;
+            var board = this.state.board;
+
+            if (board[squareIdx]) return;
+
+            board[squareIdx] = 'X';
+            var currentPlayer = this.state.currentPlayer === 'human' ? 'AI' : 'human';
+            this.setState({ board: board, currentPlayer: currentPlayer });
+            this.switchPlayer();
+        }
+    }, {
+        key: 'makeMove',
+        value: function makeMove() {
+            var board = this.state.board;
+
+            if (board.filter(function (square) {
+                return square !== null;
+            }).length >= 9) return;
+
+            while (true) {
+                var rand = Math.floor(Math.random() * 9);
+                if (!board[rand]) {
+                    board[rand] = 'O';
+                    this.switchPlayer();
+                    return;
+                }
+            }
         }
     }, {
         key: 'switchPlayer',
         value: function switchPlayer() {
-            var currentPlayer = this.state.currentPlayer === 'human' ? 'ai' : 'human';
-            this.state = { currentPlayer: currentPlayer };
+            var currentPlayer = this.state.currentPlayer === 'human' ? 'AI' : 'human';
+            this.setState({ currentPlayer: currentPlayer });
         }
     }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            var board = this.state.board;
+            var _state = this.state,
+                board = _state.board,
+                currentPlayer = _state.currentPlayer;
 
+            if (currentPlayer === 'AI') {
+                this.makeMove();
+            }
 
             return _react2.default.createElement(
                 'ul',
@@ -223,6 +257,27 @@ var Board = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Board;
+
+
+function isWinningMove(board) {
+    // const numMarks = board.filter(square => square !== null).length;
+    // if (numMarks < 6) return false;    
+
+    var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    for (var i = 0; i < winningIndeces.length; i++) {
+        var _winningIndeces$i = _slicedToArray(winningIndeces[i], 3),
+            first = _winningIndeces$i[0],
+            second = _winningIndeces$i[1],
+            third = _winningIndeces$i[2];
+
+        if (board[first] && board[first] === board[second] && board[second] === board[third]) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 /***/ }),
 
@@ -353,18 +408,11 @@ var Square = function (_React$Component) {
         _this.state = {
             selected: false
         };
-        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
 
     _createClass(Square, [{
-        key: 'handleClick',
-        value: function handleClick(e) {
-            var mark = 'X';
-            this.setState({ mark: mark });
-        }
-    }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             var idx = this.props.idx;
 
@@ -372,13 +420,13 @@ var Square = function (_React$Component) {
             var row = Math.floor(idx / 3);
 
             return _react2.default.createElement(
-                'li',
+                "li",
                 {
-                    className: 'square-li',
-                    'data-idx': idx,
-                    'data-col': col,
-                    'data-row': row,
-                    onClick: this.props.handleClick
+                    className: "square-li",
+                    "data-idx": idx,
+                    "data-col": col,
+                    "data-row": row,
+                    onClick: this.props.onClick
                 },
                 this.props.mark
             );
