@@ -17,20 +17,33 @@ export default class Board extends React.Component {
         this.makeMove = this.makeMove.bind(this);
     }
 
+    // lifecycle methods // 
+    componentDidUpdate() {
+        if (this.state.currentPlayer === 'AI') {
+            this.makeMove();
+        }
+    }
+    
+    ponentDidUpdate() {
+        if (this.state.currentPlayer === 'AI') {
+            this.makeMove();
+        }
+    }
+
     handleClick(e) {    
         const squareIdx = e.target.dataset.idx;
         const board = this.state.board;
         
+        // do nothing if square is already marked
         if (board[squareIdx]) return;
 
         board[squareIdx] = 'X';
-        const currentPlayer = (this.state.currentPlayer === 'human' ? 'AI' : 'human');
         if (isWinningMove(board)) {
             this.props.onWin(this.state.currentPlayer);
             return;
         } else {
             this.switchPlayer();
-            this.setState({ board, currentPlayer });
+            this.setState({ board });
         }
     }
 
@@ -60,13 +73,10 @@ export default class Board extends React.Component {
         this.setState({ currentPlayer })
     }
 
-
+    
     render() {
-        const { board, currentPlayer } = this.state;
-        if (currentPlayer === 'AI') {
-            this.makeMove();
-        }
-        
+        const { board } = this.state;
+
         return (
             <ul 
                 className="board-ul"

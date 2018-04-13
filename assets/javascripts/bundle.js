@@ -212,22 +212,39 @@ var Board = function (_React$Component) {
         return _this;
     }
 
+    // lifecycle methods // 
+
+
     _createClass(Board, [{
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            if (this.state.currentPlayer === 'AI') {
+                this.makeMove();
+            }
+        }
+    }, {
+        key: 'ponentDidUpdate',
+        value: function ponentDidUpdate() {
+            if (this.state.currentPlayer === 'AI') {
+                this.makeMove();
+            }
+        }
+    }, {
         key: 'handleClick',
         value: function handleClick(e) {
             var squareIdx = e.target.dataset.idx;
             var board = this.state.board;
 
+            // do nothing if square is already marked
             if (board[squareIdx]) return;
 
             board[squareIdx] = 'X';
-            var currentPlayer = this.state.currentPlayer === 'human' ? 'AI' : 'human';
             if (isWinningMove(board)) {
                 this.props.onWin(this.state.currentPlayer);
                 return;
             } else {
                 this.switchPlayer();
-                this.setState({ board: board, currentPlayer: currentPlayer });
+                this.setState({ board: board });
             }
         }
     }, {
@@ -265,13 +282,8 @@ var Board = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var _state = this.state,
-                board = _state.board,
-                currentPlayer = _state.currentPlayer;
+            var board = this.state.board;
 
-            if (currentPlayer === 'AI') {
-                this.makeMove();
-            }
 
             return _react2.default.createElement(
                 'ul',
