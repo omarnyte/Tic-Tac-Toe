@@ -205,10 +205,12 @@ var Board = function (_React$Component) {
 
         _this.state = {
             board: [null, null, null, null, null, null, null, null, null],
-            currentPlayer: 'human'
+            currentPlayer: 'human',
+            over: false
         };
         _this.handleClick = _this.handleClick.bind(_this);
         _this.makeMove = _this.makeMove.bind(_this);
+        _this.nextPlayer = _this.nextPlayer.bind(_this);
         return _this;
     }
 
@@ -216,66 +218,85 @@ var Board = function (_React$Component) {
 
 
     _createClass(Board, [{
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate() {
-            if (this.state.currentPlayer === 'AI') {
-                this.makeMove();
-            }
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (this.state.currentPlayer === 'AI') this.makeMove();
         }
     }, {
-        key: 'ponentDidUpdate',
-        value: function ponentDidUpdate() {
-            if (this.state.currentPlayer === 'AI') {
-                this.makeMove();
-            }
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            var _state = this.state,
+                currentPlayer = _state.currentPlayer,
+                over = _state.over;
+
+            if (currentPlayer === 'AI' && !over) this.makeMove();
         }
+
+        // handlers // 
+
     }, {
         key: 'handleClick',
         value: function handleClick(e) {
-            var squareIdx = e.target.dataset.idx;
-            var board = this.state.board;
+            console.log('handling');
 
-            // do nothing if square is already marked
-            if (board[squareIdx]) return;
+            var squareIdx = e.target.dataset.idx;
+            var board = this.state.board.slice();
+            var _state2 = this.state,
+                currentPlayer = _state2.currentPlayer,
+                over = _state2.over;
+
+            // do nothing if square is already marked or if game is over
+
+            if (board[squareIdx] || over) return;
 
             board[squareIdx] = 'X';
-            if (isWinningMove(board)) {
-                this.props.onWin(this.state.currentPlayer);
-                return;
-            } else {
-                this.switchPlayer();
-                this.setState({ board: board });
-            }
+            currentPlayer = this.nextPlayer();
+
+            this.setState({ board: board, currentPlayer: currentPlayer });
+            // if (isWinningMove(board)) {
+            //     this.props.onWin(this.state.currentPlayer);
+            //     return;
+            // } else {
+            //     const currentPlayer = this.nextPlayer();
+            //     this.setState({ board, currentPlayer });
+            // }
         }
+
+        // helper methods // 
+
     }, {
         key: 'makeMove',
         value: function makeMove() {
-            var board = this.state.board;
+            var board = this.state.board.slice();
 
-            if (board.filter(function (square) {
-                return square !== null;
-            }).length >= 9) return;
+            var currentPlayer = this.state.currentPlayer;
 
+            // pick random, empty square
             while (true) {
                 var rand = Math.floor(Math.random() * 9);
-                if (!board[rand]) {
+                if (board[rand] !== null) {
                     board[rand] = 'O';
                     break;
                 }
             }
 
+            currentPlayer = this.nextPlayer();
+
             if (isWinningMove(board)) {
                 this.props.onWin(this.state.currentPlayer);
-                return;
             } else {
-                this.switchPlayer();
+                this.nextPlayer();
             }
+
+            this.setState({ board: board, currentPlayer: currentPlayer });
         }
     }, {
-        key: 'switchPlayer',
-        value: function switchPlayer() {
-            var currentPlayer = this.state.currentPlayer === 'human' ? 'AI' : 'human';
-            this.setState({ currentPlayer: currentPlayer });
+        key: 'nextPlayer',
+        value: function nextPlayer() {
+            console.log('next player');
+
+            var player = this.state.currentPlayer === 'AI' ? 'human' : 'AI';
+            return player;
         }
     }, {
         key: 'render',
