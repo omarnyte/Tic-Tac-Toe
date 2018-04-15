@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { 
+    bestMoveIndex, 
+    isWinningMove } from '../../../assets/javascripts/AILogic';
 import Square from '../square/square.jsx';
 
 export default class Board extends React.Component {
@@ -12,83 +15,68 @@ export default class Board extends React.Component {
                 null, null, null
             ],
             currentPlayer: 'human',
-            over: false 
+            gameOver: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.makeMove = this.makeMove.bind(this);
-        this.nextPlayer = this.nextPlayer.bind(this);
     }
 
-    // lifecycle methods // 
-    componentDidMount() {
+    // lifecycle methods 
+    componentDidMount(){
         if (this.state.currentPlayer === 'AI') this.makeMove();
     }
-    
-    componentDidUpdate() {
-        const { currentPlayer, over } = this.state; 
-        if (currentPlayer === 'AI' && !over) this.makeMove();
+
+    componentDidUpdate(){
+        const { currentPlayer, gameOver } = this.state;
+        if (currentPlayer === 'AI' && !gameOver) this.makeMove();
     }
-    
-    // handlers // 
-    handleClick(e) {    
-        console.log('handling');
-        
-        const squareIdx = e.target.dataset.idx;
+
+    // handlers 
+    handleClick(e) {
         let board = this.state.board.slice();
-        let { currentPlayer, over } = this.state;
-        
-        // do nothing if square is already marked or if game is over
-        if (board[squareIdx] || over) return;
-
+        let { currentPlayer, gameOver } = this.state;
+        const squareIdx = e.target.dataset.idx;
+        // do nothing if sqaure is already marked or if game is over
+        if (board[squareIdx] !== null || gameOver) return;
         board[squareIdx] = 'X';
-        currentPlayer = this.nextPlayer();
-        
-        this.setState({ board, currentPlayer});
-        // if (isWinningMove(board)) {
-        //     this.props.onWin(this.state.currentPlayer);
-        //     return;
-        // } else {
-        //     const currentPlayer = this.nextPlayer();
-        //     this.setState({ board, currentPlayer });
-        // }
-    }
 
-    // helper methods // 
-    makeMove() {
-        let board  = this.state.board.slice();
-        
-        let currentPlayer = this.state.currentPlayer; 
-        
-        // pick random, empty square
-        while (true) {
-            const rand = Math.floor(Math.random() * 9);
-            if (board[rand] !== null) {
-                board[rand] = 'O';
-                break;
-            }
-        }
-
-        currentPlayer = this.nextPlayer();
-        
-        if (isWinningMove(board)) {
-            this.props.onWin(this.state.currentPlayer);
+        if (isWinningMove(board, 'X')) {
+            gameOver = true;
         } else {
-            this.nextPlayer();
+            currentPlayer = 'AI';
         }
-
-        this.setState({ board, currentPlayer })
+        this.setState({ board, currentPlayer, gameOver });
     }
 
-    nextPlayer() {
-        console.log('next player');
+    // helper methods 
+    makeMove() {        
+        let board = this.state.board.slice();
+        let { currentPlayer, gameOver } = this.state;
         
-        const player = (this.state.currentPlayer === 'AI' ? 'human' : 'AI');
-        return player;
-    }
+        // test 
+        // let availableSquares = [];
+        // board.forEach((square, idx) => {
+        //     if (square === null) availableSquares.push(idx);
+        // })
+        // board[availableSquares[0]] = 'O';
+        const idx = bestMoveIndex(board);
+        board[idx] = 'O';
 
+        if (isWinningMove(board, 'O')) {
+            gameOver = true;
+        } else {
+            currentPlayer = 'human';
+        }
+        this.setState({ board, currentPlayer, gameOver });
+
+        // const idx = bestMoveIndex(board);
+        // board[idx] = 'O';
+        // currentPlayer = 'human';
+        // this.setState({ board });
+    }
     
     render() {
-        const { board } = this.state;
+        const { board, currentPlayer, gameOver } = this.state;
 
         return (
             <ul 
@@ -110,27 +98,3 @@ export default class Board extends React.Component {
 
 } 
 
-function isWinningMove(board) {
-    const numMarks = board.filter(square => square !== null).length;
-    if (numMarks < 6) return false;    
-
-    const winningIndeces = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-
-    for (let i = 0; i < winningIndeces.length; i++) {
-        const [first, second, third] = winningIndeces[i];
-        if (board[first] && board[first] === board[second] && board[second] === board[third]) {
-            return true;
-        }
-    }
-
-    return false;
-}

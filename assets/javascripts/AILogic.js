@@ -1,9 +1,20 @@
-const humanMark = 'O';
-const AIMark = 'X';
-var origBoard = ['O', null, 'X', 'X', null, 'X', null, 'O', 'O'];
+const humanMark = 'X';
+const AIMark = 'O';
+let origBoard = 
+[   
+    null, 'O', null, 
+    null, 'O', 'X', 
+    'X',  'X', 'O'
+];
 
-let bestMoveIndex = minimax(origBoard, AIMark);
-console.log(bestMoveIndex);
+export const bestMoveIndex = (board) => {
+    // if AI plays first, pick a random corner 
+    if (board.filter(square => square === null).length === 8) {
+        const cornerIndexes = [0, 2, 5, 8];
+        return cornerIndexes[Math.floor(Math.random() * 4)];
+    }
+    return minimax(board, AIMark).index;
+}
 
 function emptySquareIndeces(board) {
     const indeces = [];
@@ -13,9 +24,9 @@ function emptySquareIndeces(board) {
     return indeces;
 }
 
-function isWinningMove(board, player) {
-    const numMarks = board.filter(square => square !== null).length;
-    if (numMarks < 6) return false;
+export const isWinningMove = (board, player) => {
+    // const numMarks = board.filter(square => square !== null).length;
+    // if (numMarks < 6) return false;
 
     const winningIndeces = [
         [0, 1, 2],
@@ -40,7 +51,6 @@ function isWinningMove(board, player) {
 
 function minimax(board, playerMark) {
     let availableIndeces = emptySquareIndeces(board);
-    console.log('availableIndeces', availableIndeces);
 
     // base cases  
     if (isWinningMove(board, humanMark)) {
@@ -64,13 +74,9 @@ function minimax(board, playerMark) {
 
         // pass simulated board down to next depth with opposing player as current player  
         let result;
-        if (playerMark === AIMark) {
-            result = minimax(board, humanMark);
-            move.score = result.score;
-        } else {
-            result = minimax(board, AIMark);
-            move.score = result.score;
-        }
+        const oppPlayerMark = (playerMark === AIMark ? humanMark : AIMark);
+        result = minimax(board, oppPlayerMark);
+        move.score = result.score;
 
         // simualted spot is retuned to null before next simulated move
         board[availableIndeces[i]] = null;
@@ -100,7 +106,5 @@ function minimax(board, playerMark) {
         }
     }
 
-    console.log('moves', moves);
     return moves[bestMove];
 }
-

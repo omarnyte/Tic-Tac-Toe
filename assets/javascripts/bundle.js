@@ -71,6 +71,127 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./assets/javascripts/AILogic.js":
+/*!***************************************!*\
+  !*** ./assets/javascripts/AILogic.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var humanMark = 'X';
+var AIMark = 'O';
+var origBoard = [null, 'O', null, null, 'O', 'X', 'X', 'X', 'O'];
+
+var bestMoveIndex = exports.bestMoveIndex = function bestMoveIndex(board) {
+    // if AI plays first, pick a random corner 
+    if (board.filter(function (square) {
+        return square === null;
+    }).length === 8) {
+        var cornerIndexes = [0, 2, 5, 8];
+        return cornerIndexes[Math.floor(Math.random() * 4)];
+    }
+    return minimax(board, AIMark).index;
+};
+
+function emptySquareIndeces(board) {
+    var indeces = [];
+    board.forEach(function (square, idx) {
+        if (!square) indeces.push(idx);
+    });
+    return indeces;
+}
+
+var isWinningMove = exports.isWinningMove = function isWinningMove(board, player) {
+    // const numMarks = board.filter(square => square !== null).length;
+    // if (numMarks < 6) return false;
+
+    var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    for (var i = 0; i < winningIndeces.length; i++) {
+        var _winningIndeces$i = _slicedToArray(winningIndeces[i], 3),
+            first = _winningIndeces$i[0],
+            second = _winningIndeces$i[1],
+            third = _winningIndeces$i[2];
+
+        if (board[first] === player && board[second] === player && board[third] === player) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+function minimax(board, playerMark) {
+    var availableIndeces = emptySquareIndeces(board);
+
+    // base cases  
+    if (isWinningMove(board, humanMark)) {
+        // human wins game
+        return { score: -100 };
+    } else if (isWinningMove(board, AIMark)) {
+        // AI wins game 
+        return { score: 100 };
+    } else if (availableIndeces.length === 0) {
+        // AI and human tie 
+        return { score: 0 };
+    }
+
+    // TODO move to helper method 
+    var moves = [];
+    for (var i = 0; i < availableIndeces.length; i++) {
+        var move = {};
+        move.index = availableIndeces[i];
+        // simulate move by current player 
+        board[availableIndeces[i]] = playerMark;
+
+        // pass simulated board down to next depth with opposing player as current player  
+        var result = void 0;
+        var oppPlayerMark = playerMark === AIMark ? humanMark : AIMark;
+        result = minimax(board, oppPlayerMark);
+        move.score = result.score;
+
+        // simualted spot is retuned to null before next simulated move
+        board[availableIndeces[i]] = null;
+        moves.push(move);
+    }
+
+    // TODO move to helper method
+    var bestMove = void 0;
+    var bestScore = void 0;
+    if (playerMark === AIMark) {
+        // AI player aims to maximize score 
+        bestScore = -10000;
+        for (var _i = 0; _i < moves.length; _i++) {
+            if (moves[_i].score > bestScore) {
+                bestScore = moves[_i].score;
+                bestMove = _i;
+            }
+        }
+    } else {
+        // human player aims to minimize score 
+        bestScore = 10000;
+        for (var _i2 = 0; _i2 < moves.length; _i2++) {
+            if (moves[_i2].score < bestScore) {
+                bestScore = moves[_i2].score;
+                bestMove = _i2;
+            }
+        }
+    }
+
+    return moves[bestMove];
+}
+
+/***/ }),
+
 /***/ "./frontend/app.jsx":
 /*!**************************!*\
   !*** ./frontend/app.jsx ***!
@@ -175,13 +296,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
+
+var _AILogic = __webpack_require__(/*! ../../../assets/javascripts/AILogic */ "./assets/javascripts/AILogic.js");
 
 var _square = __webpack_require__(/*! ../square/square.jsx */ "./frontend/components/square/square.jsx");
 
@@ -206,15 +327,14 @@ var Board = function (_React$Component) {
         _this.state = {
             board: [null, null, null, null, null, null, null, null, null],
             currentPlayer: 'human',
-            over: false
+            gameOver: false
         };
         _this.handleClick = _this.handleClick.bind(_this);
         _this.makeMove = _this.makeMove.bind(_this);
-        _this.nextPlayer = _this.nextPlayer.bind(_this);
         return _this;
     }
 
-    // lifecycle methods // 
+    // lifecycle methods 
 
 
     _createClass(Board, [{
@@ -227,83 +347,75 @@ var Board = function (_React$Component) {
         value: function componentDidUpdate() {
             var _state = this.state,
                 currentPlayer = _state.currentPlayer,
-                over = _state.over;
+                gameOver = _state.gameOver;
 
-            if (currentPlayer === 'AI' && !over) this.makeMove();
+            if (currentPlayer === 'AI' && !gameOver) this.makeMove();
         }
 
-        // handlers // 
+        // handlers 
 
     }, {
         key: 'handleClick',
         value: function handleClick(e) {
-            console.log('handling');
-
-            var squareIdx = e.target.dataset.idx;
             var board = this.state.board.slice();
             var _state2 = this.state,
                 currentPlayer = _state2.currentPlayer,
-                over = _state2.over;
+                gameOver = _state2.gameOver;
 
-            // do nothing if square is already marked or if game is over
-
-            if (board[squareIdx] || over) return;
-
+            var squareIdx = e.target.dataset.idx;
+            // do nothing if sqaure is already marked or if game is over
+            if (board[squareIdx] !== null || gameOver) return;
             board[squareIdx] = 'X';
-            currentPlayer = this.nextPlayer();
 
-            this.setState({ board: board, currentPlayer: currentPlayer });
-            // if (isWinningMove(board)) {
-            //     this.props.onWin(this.state.currentPlayer);
-            //     return;
-            // } else {
-            //     const currentPlayer = this.nextPlayer();
-            //     this.setState({ board, currentPlayer });
-            // }
+            if ((0, _AILogic.isWinningMove)(board, 'X')) {
+                gameOver = true;
+            } else {
+                currentPlayer = 'AI';
+            }
+            this.setState({ board: board, currentPlayer: currentPlayer, gameOver: gameOver });
         }
 
-        // helper methods // 
+        // helper methods 
 
     }, {
         key: 'makeMove',
         value: function makeMove() {
             var board = this.state.board.slice();
+            var _state3 = this.state,
+                currentPlayer = _state3.currentPlayer,
+                gameOver = _state3.gameOver;
 
-            var currentPlayer = this.state.currentPlayer;
+            // test 
+            // let availableSquares = [];
+            // board.forEach((square, idx) => {
+            //     if (square === null) availableSquares.push(idx);
+            // })
+            // board[availableSquares[0]] = 'O';
 
-            // pick random, empty square
-            while (true) {
-                var rand = Math.floor(Math.random() * 9);
-                if (board[rand] !== null) {
-                    board[rand] = 'O';
-                    break;
-                }
-            }
+            var idx = (0, _AILogic.bestMoveIndex)(board);
+            board[idx] = 'O';
 
-            currentPlayer = this.nextPlayer();
-
-            if (isWinningMove(board)) {
-                this.props.onWin(this.state.currentPlayer);
+            if ((0, _AILogic.isWinningMove)(board, 'O')) {
+                gameOver = true;
             } else {
-                this.nextPlayer();
+                currentPlayer = 'human';
             }
+            this.setState({ board: board, currentPlayer: currentPlayer, gameOver: gameOver });
 
-            this.setState({ board: board, currentPlayer: currentPlayer });
-        }
-    }, {
-        key: 'nextPlayer',
-        value: function nextPlayer() {
-            console.log('next player');
-
-            var player = this.state.currentPlayer === 'AI' ? 'human' : 'AI';
-            return player;
+            // const idx = bestMoveIndex(board);
+            // board[idx] = 'O';
+            // currentPlayer = 'human';
+            // this.setState({ board });
         }
     }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            var board = this.state.board;
+            var _state4 = this.state,
+                board = _state4.board,
+                currentPlayer = _state4.currentPlayer,
+                gameOver = _state4.gameOver;
 
 
             return _react2.default.createElement(
@@ -327,29 +439,6 @@ var Board = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Board;
-
-
-function isWinningMove(board) {
-    var numMarks = board.filter(function (square) {
-        return square !== null;
-    }).length;
-    if (numMarks < 6) return false;
-
-    var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-
-    for (var i = 0; i < winningIndeces.length; i++) {
-        var _winningIndeces$i = _slicedToArray(winningIndeces[i], 3),
-            first = _winningIndeces$i[0],
-            second = _winningIndeces$i[1],
-            third = _winningIndeces$i[2];
-
-        if (board[first] && board[first] === board[second] && board[second] === board[third]) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 /***/ }),
 

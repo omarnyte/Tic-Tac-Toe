@@ -1,4 +1,4 @@
-import * as AILogic from "../AILogic";
+import * as AILogic from "../AILogic.js";
 
 describe('AI Logic', () => {
     describe('helper methods', () => {
@@ -9,7 +9,7 @@ describe('AI Logic', () => {
         ];
         const aAnswer = [1, 2, 3, 4, 5, 6, 7];
         test('selects unmarked indeces', () => {
-            expect(aBoard).toEqual(expect.arrayContaining(aAnswer));
+            expect(AILogic.emptySquareIndeces(aBoard)).toEqual(expect.arrayContaining(aAnswer));
         });
     });
 
