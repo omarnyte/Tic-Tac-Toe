@@ -263,11 +263,20 @@ var Root = function (_React$Component) {
             gameOver: false
         };
         _this.handleScoreUpdate = _this.handleScoreUpdate.bind(_this);
-        _this.renderNewGameButton = _this.renderNewGameButton.bind(_this);
+        _this.handleButtonClick = _this.handleButtonClick.bind(_this);
         return _this;
     }
 
+    // handlers 
+
+
     _createClass(Root, [{
+        key: 'handleButtonClick',
+        value: function handleButtonClick() {
+            var gameOver = false;
+            this.setState({ gameOver: gameOver });
+        }
+    }, {
         key: 'handleScoreUpdate',
         value: function handleScoreUpdate(winner) {
             var _state = this.state,
@@ -288,7 +297,10 @@ var Root = function (_React$Component) {
         value: function renderNewGameButton() {
             return _react2.default.createElement(
                 'button',
-                { className: 'new-game-button' },
+                {
+                    className: 'new-game-button',
+                    onClick: this.handleButtonClick
+                },
                 'New Game'
             );
         }
@@ -379,6 +391,10 @@ var Board = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             if (this.state.currentPlayer === 'AI') this.makeMove();
+
+            var currentPlayer = 'human';
+            var newGameButton = document.querySelector('.new-game-button');
+            newGameButton.addEventListener('click', this.newGame.bind(this));
         }
     }, {
         key: 'componentDidUpdate',
@@ -405,11 +421,18 @@ var Board = function (_React$Component) {
 
             if ((0, _AILogic.isWinningMove)(board, 'X')) {
                 this.props.updateScore('human');
-                return;
             } else {
                 currentPlayer = 'AI';
             }
             this.setState({ board: board, currentPlayer: currentPlayer });
+        }
+    }, {
+        key: 'newGame',
+        value: function newGame() {
+            this.setState({
+                board: [null, null, null, null, null, null, null, null, null],
+                currentPlayer: 'human'
+            });
         }
 
         // helper methods 
@@ -426,7 +449,6 @@ var Board = function (_React$Component) {
 
             if ((0, _AILogic.isWinningMove)(board, 'O')) {
                 this.props.updateScore('AI');
-                return;
             } else {
                 currentPlayer = 'human';
             }

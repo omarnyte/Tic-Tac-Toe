@@ -23,6 +23,10 @@ export default class Board extends React.Component {
     // lifecycle methods 
     componentDidMount(){        
         if (this.state.currentPlayer === 'AI') this.makeMove();
+
+        let currentPlayer = 'human'; 
+        const newGameButton = document.querySelector('.new-game-button');
+        newGameButton.addEventListener('click', this.newGame.bind(this));
     }
 
     componentDidUpdate(){
@@ -43,11 +47,21 @@ export default class Board extends React.Component {
 
         if (isWinningMove(board, 'X')) {
             this.props.updateScore('human');
-            return;
         } else {
             currentPlayer = 'AI';
         }
         this.setState({ board, currentPlayer });
+    }
+
+    newGame() {
+        this.setState({
+            board: [
+                null, null, null,
+                null, null, null,
+                null, null, null
+            ],
+            currentPlayer: 'human'
+        });
     }
 
     // helper methods 
@@ -60,7 +74,6 @@ export default class Board extends React.Component {
 
         if (isWinningMove(board, 'O')) {
             this.props.updateScore('AI');
-            return;
         } else {
             currentPlayer = 'human';
         }

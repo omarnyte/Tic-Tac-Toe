@@ -13,7 +13,13 @@ class Root extends React.Component {
             gameOver: false
         }
         this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
-        this.renderNewGameButton = this.renderNewGameButton.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this); 
+    }
+
+    // handlers 
+    handleButtonClick() {
+        let gameOver = false;
+        this.setState({ gameOver });
     }
 
     handleScoreUpdate(winner) {
@@ -29,7 +35,12 @@ class Root extends React.Component {
 
     renderNewGameButton() {
         return (
-            <button className='new-game-button'>New Game</button>
+            <button 
+                className='new-game-button' 
+                onClick={ this.handleButtonClick }
+            >
+                New Game
+            </button>
         );
     }
 
