@@ -22,7 +22,7 @@ export default class Board extends React.Component {
     }
 
     // lifecycle methods 
-    componentDidMount(){
+    componentDidMount(){        
         if (this.state.currentPlayer === 'AI') this.makeMove();
     }
 
@@ -33,6 +33,7 @@ export default class Board extends React.Component {
 
     // handlers 
     handleClick(e) {
+        console.log('handling click')
         let board = this.state.board.slice();
         let { currentPlayer, gameOver } = this.state;
         const squareIdx = e.target.dataset.idx;
@@ -50,6 +51,8 @@ export default class Board extends React.Component {
 
     // helper methods 
     makeMove() {        
+        console.log('making move');
+        
         let board = this.state.board.slice();
         let { currentPlayer, gameOver } = this.state;
         
@@ -77,7 +80,7 @@ export default class Board extends React.Component {
     
     render() {
         const { board, currentPlayer, gameOver } = this.state;
-
+        console.log(this.state)
         return (
             <ul 
                 className="board-ul"

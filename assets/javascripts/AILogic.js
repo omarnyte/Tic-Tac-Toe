@@ -1,15 +1,11 @@
+import { log } from "util";
+
 const humanMark = 'X';
 const AIMark = 'O';
-let origBoard = 
-[   
-    null, 'O', null, 
-    null, 'O', 'X', 
-    'X',  'X', 'O'
-];
 
 export const bestMoveIndex = (board) => {
     // if AI plays first, pick a random corner 
-    if (board.filter(square => square === null).length === 8) {
+    if (board.filter(square => square === null).length === 9) {
         const cornerIndexes = [0, 2, 5, 8];
         return cornerIndexes[Math.floor(Math.random() * 4)];
     }
@@ -88,7 +84,7 @@ function minimax(board, playerMark) {
     let bestScore;
     if (playerMark === AIMark) {
         // AI player aims to maximize score 
-        bestScore = -10000;
+        bestScore = -100000;
         for (let i = 0; i < moves.length; i++) {
             if (moves[i].score > bestScore) {
                 bestScore = moves[i].score;
@@ -97,7 +93,7 @@ function minimax(board, playerMark) {
         }
     } else {
         // human player aims to minimize score 
-        bestScore = 10000;
+        bestScore = 100000;
         for (let i = 0; i < moves.length; i++) {
             if (moves[i].score < bestScore) {
                 bestScore = moves[i].score;
@@ -108,3 +104,4 @@ function minimax(board, playerMark) {
 
     return moves[bestMove];
 }
+
