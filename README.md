@@ -30,13 +30,14 @@ function minimax(board, playerMark) {
 
     // create an array of all possible move objects, each of which contains an 
     // index and a score
-    const moves = createMovesArr(board, availableIndeces, playerMark)
+    const moves = createMovesArr(board, availableIndeces, playerMark);    
 
-    // select the best move index by score based on the current player 
+    // select the index of the best move (from the moves array) by score based on the current player 
     const bestIdx = bestIdxFromMoves(moves, playerMark);
 
     // return the best move object
     return moves[bestIdx];
+}
 }
 ``` 
 

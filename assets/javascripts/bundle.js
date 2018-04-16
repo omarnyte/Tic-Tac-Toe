@@ -84,7 +84,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.isWinningMove = exports.bestMoveIndex = undefined;
+exports.bestIdxFromMoves = exports.createMovesArr = exports.isWinningMove = exports.bestMoveIndex = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -126,7 +126,7 @@ function minimax(board, playerMark) {
     // index and a score
     var moves = createMovesArr(board, availableIndeces, playerMark);
 
-    // select the best move index by score based on the current player 
+    // select the index of the best move (from the moves array) by score based on the current player 
     var bestIdx = bestIdxFromMoves(moves, playerMark);
 
     // return the best move object
@@ -141,12 +141,12 @@ function emptySquareIndeces(arr) {
     return result;
 }
 
-var isWinningMove = exports.isWinningMove = function isWinningMove(board, player) {
+var isWinningMove = exports.isWinningMove = function isWinningMove(board, playerMark) {
     // return false early if there aren't enough filled squares to end a game
     var numMarks = board.filter(function (square) {
         return square !== null;
     }).length;
-    if (numMarks < 6) return false;
+    if (numMarks < 5) return false;
 
     var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
@@ -156,7 +156,7 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
             second = _winningIndeces$i[1],
             third = _winningIndeces$i[2];
 
-        if (board[first] === player && board[second] === player && board[third] === player) {
+        if (board[first] === playerMark && board[second] === playerMark && board[third] === playerMark) {
             return true;
         }
     }
@@ -164,7 +164,7 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
     return false;
 };
 
-function createMovesArr(board, availableIndeces, playerMark) {
+var createMovesArr = exports.createMovesArr = function createMovesArr(board, availableIndeces, playerMark) {
     var moves = [];
 
     for (var i = 0; i < availableIndeces.length; i++) {
@@ -184,9 +184,9 @@ function createMovesArr(board, availableIndeces, playerMark) {
         moves.push(move);
     }
     return moves;
-}
+};
 
-function bestIdxFromMoves(movesArr, playerMark) {
+var bestIdxFromMoves = exports.bestIdxFromMoves = function bestIdxFromMoves(movesArr, playerMark) {
     var bestIdx = void 0;
     var bestScore = void 0;
     if (playerMark === AIMark) {
@@ -209,7 +209,7 @@ function bestIdxFromMoves(movesArr, playerMark) {
         });
     }
     return bestIdx;
-}
+};
 
 /***/ }),
 

@@ -32,9 +32,9 @@ function minimax(board, playerMark) {
 
     // create an array of all possible move objects, each of which contains an 
     // index and a score
-    const moves = createMovesArr(board, availableIndeces, playerMark)
+    const moves = createMovesArr(board, availableIndeces, playerMark);    
 
-    // select the best move index by score based on the current player 
+    // select the index of the best move (from the moves array) by score based on the current player 
     const bestIdx = bestIdxFromMoves(moves, playerMark);
 
     // return the best move object
@@ -49,10 +49,10 @@ function emptySquareIndeces(arr) {
     return result;
 }
 
-export const isWinningMove = (board, player) => {
+export const isWinningMove = (board, playerMark) => {
     // return false early if there aren't enough filled squares to end a game
     const numMarks = board.filter(square => square !== null).length;
-    if (numMarks < 6) return false;
+    if (numMarks < 5) return false;
 
     const winningIndeces = [
         [0, 1, 2],
@@ -67,7 +67,7 @@ export const isWinningMove = (board, player) => {
 
     for (let i = 0; i < winningIndeces.length; i++) {
         const [first, second, third] = winningIndeces[i];
-        if (board[first] === player && board[second] === player && board[third] === player) {
+        if (board[first] === playerMark && board[second] === playerMark && board[third] === playerMark) {
             return true;
         }
     }
@@ -75,7 +75,7 @@ export const isWinningMove = (board, player) => {
     return false;
 }
 
-function createMovesArr(board, availableIndeces, playerMark) {
+export const createMovesArr = (board, availableIndeces, playerMark) => {
     let moves = [];
     
     for (let i = 0; i < availableIndeces.length; i++) {
@@ -97,7 +97,7 @@ function createMovesArr(board, availableIndeces, playerMark) {
     return moves;
 }
 
-function bestIdxFromMoves(movesArr, playerMark) {
+export const bestIdxFromMoves = (movesArr, playerMark) => {
     let bestIdx;
     let bestScore;
     if (playerMark === AIMark) {
