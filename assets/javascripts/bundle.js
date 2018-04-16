@@ -94,22 +94,51 @@ var humanMark = 'X';
 var AIMark = 'O';
 
 var bestMoveIndex = exports.bestMoveIndex = function bestMoveIndex(board) {
-    // if AI plays first, pick a random corner 
     if (board.filter(function (square) {
         return square === null;
     }).length === 9) {
-        var cornerIndexes = [0, 2, 5, 8];
-        return cornerIndexes[Math.floor(Math.random() * 4)];
+        // if AI plays first, pick a random corner 
+        var cornerIndeces = [0, 2, 5, 8];
+        return cornerIndeces[Math.floor(Math.random() * 4)];
+    } else {
+        // otherwise, determine best move (and index) through minimax algorithm 
+        return minimax(board, AIMark).index;
     }
-    return minimax(board, AIMark).index;
 };
 
-function emptySquareIndeces(board) {
-    var indeces = [];
-    board.forEach(function (square, idx) {
-        if (!square) indeces.push(idx);
+function minimax(board, playerMark) {
+    // determine all non-null indeces of board array 
+    var availableIndeces = emptySquareIndeces(board);
+
+    // recursive base cases  
+    if (isWinningMove(board, humanMark)) {
+        // human wins game
+        return { score: -100 };
+    } else if (isWinningMove(board, AIMark)) {
+        // AI wins game 
+        return { score: 100 };
+    } else if (availableIndeces.length === 0) {
+        // AI and human tie 
+        return { score: 0 };
+    }
+
+    // create an array of all possible move objects, each of which contains an 
+    // index and a score
+    var moves = createMovesArr(board, availableIndeces, playerMark);
+
+    // select the best move index by score based on the current player 
+    var bestIdx = bestIdxFromMoves(moves, playerMark);
+
+    // return the best move object
+    return moves[bestIdx];
+}
+
+function emptySquareIndeces(arr) {
+    var result = [];
+    arr.forEach(function (square, idx) {
+        if (!square) result.push(idx);
     });
-    return indeces;
+    return result;
 }
 
 var isWinningMove = exports.isWinningMove = function isWinningMove(board, player) {
@@ -135,53 +164,9 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
     return false;
 };
 
-function bestMoveFromMoves(movesArr, playerMark) {
-    var bestIdx = void 0;
-    var bestScore = void 0;
-    if (playerMark === AIMark) {
-        // AI player aims to maximize score 
-        bestScore = -100000;
-        for (var i = 0; i < movesArr.length; i++) {
-            if (movesArr[i].score > bestScore) {
-                bestScore = movesArr[i].score;
-                bestIdx = i;
-            }
-        }
-    } else {
-        // human player aims to minimize score 
-        bestScore = 100000;
-        for (var _i = 0; _i < movesArr.length; _i++) {
-            if (movesArr[_i].score < bestScore) {
-                bestScore = movesArr[_i].score;
-                bestIdx = _i;
-            }
-        }
-    }
-    return bestIdx;
-}
-
-function minimax(board, playerMark) {
-    var availableIndeces = emptySquareIndeces(board);
-
-    // base cases  
-    if (isWinningMove(board, humanMark)) {
-        // human wins game
-        return { score: -100 };
-    } else if (isWinningMove(board, AIMark)) {
-        // AI wins game 
-        return { score: 100 };
-    } else if (availableIndeces.length === 0) {
-        // AI and human tie 
-        return { score: 0 };
-    }
-
-    var moves = createMovesArr(board, availableIndeces, playerMark);
-    var bestIdx = bestMoveFromMoves(moves, playerMark);
-    return moves[bestIdx];
-}
-
 function createMovesArr(board, availableIndeces, playerMark) {
     var moves = [];
+
     for (var i = 0; i < availableIndeces.length; i++) {
         var move = {};
         move.index = availableIndeces[i];
@@ -194,11 +179,36 @@ function createMovesArr(board, availableIndeces, playerMark) {
         result = minimax(board, oppPlayerMark);
         move.score = result.score;
 
-        // simualted spot is retuned to null before next simulated move
+        // simualted spot is returned to null before next simulated move
         board[availableIndeces[i]] = null;
         moves.push(move);
     }
     return moves;
+}
+
+function bestIdxFromMoves(movesArr, playerMark) {
+    var bestIdx = void 0;
+    var bestScore = void 0;
+    if (playerMark === AIMark) {
+        // AI player aims to maximize score 
+        bestScore = -100000;
+        movesArr.forEach(function (move, idx) {
+            if (movesArr[idx].score > bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        });
+    } else {
+        // human player aims to minimize score
+        bestScore = 100000;
+        movesArr.forEach(function (move, idx) {
+            if (movesArr[idx].score < bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        });
+    }
+    return bestIdx;
 }
 
 /***/ }),

@@ -4,20 +4,49 @@ const humanMark = 'X';
 const AIMark = 'O';
 
 export const bestMoveIndex = (board) => {
-    // if AI plays first, pick a random corner 
     if (board.filter(square => square === null).length === 9) {
-        const cornerIndexes = [0, 2, 5, 8];
-        return cornerIndexes[Math.floor(Math.random() * 4)];
+        // if AI plays first, pick a random corner 
+        const cornerIndeces = [0, 2, 5, 8];
+        return cornerIndeces[Math.floor(Math.random() * 4)];
+    } else { 
+        // otherwise, determine best move (and index) through minimax algorithm 
+        return minimax(board, AIMark).index;
     }
-    return minimax(board, AIMark).index;
 }
 
-function emptySquareIndeces(board) {
-    const indeces = [];
-    board.forEach((square, idx) => {
-        if (!square) indeces.push(idx);
+function minimax(board, playerMark) {
+    // determine all non-null indeces of board array 
+    let availableIndeces = emptySquareIndeces(board);
+
+    // recursive base cases  
+    if (isWinningMove(board, humanMark)) {
+        // human wins game
+        return { score: -100 }
+    } else if (isWinningMove(board, AIMark)) {
+        // AI wins game 
+        return { score: 100 }
+    } else if (availableIndeces.length === 0) {
+        // AI and human tie 
+        return { score: 0 }
+    }
+
+    // create an array of all possible move objects, each of which contains an 
+    // index and a score
+    const moves = createMovesArr(board, availableIndeces, playerMark)
+
+    // select the best move index by score based on the current player 
+    const bestIdx = bestIdxFromMoves(moves, playerMark);
+
+    // return the best move object
+    return moves[bestIdx];
+}
+
+function emptySquareIndeces(arr) {
+    const result = [];
+    arr.forEach((square, idx) => {
+        if (!square) result.push(idx);
     })
-    return indeces;
+    return result;
 }
 
 export const isWinningMove = (board, player) => {
@@ -46,53 +75,9 @@ export const isWinningMove = (board, player) => {
     return false;
 }
 
-function bestMoveFromMoves(movesArr, playerMark) {
-    let bestIdx;
-    let bestScore;
-    if (playerMark === AIMark) {
-        // AI player aims to maximize score 
-        bestScore = -100000;
-        for (let i = 0; i < movesArr.length; i++) {
-            if (movesArr[i].score > bestScore) {
-                bestScore = movesArr[i].score;
-                bestIdx = i;
-            }
-        }
-    } else {
-        // human player aims to minimize score 
-        bestScore = 100000;
-        for (let i = 0; i < movesArr.length; i++) {
-            if (movesArr[i].score < bestScore) {
-                bestScore = movesArr[i].score;
-                bestIdx = i;
-            }
-        }
-    }
-    return bestIdx;
-}
-
-function minimax(board, playerMark) {
-    let availableIndeces = emptySquareIndeces(board);
-
-    // base cases  
-    if (isWinningMove(board, humanMark)) {
-        // human wins game
-        return { score: -100 }
-    } else if (isWinningMove(board, AIMark)) {
-        // AI wins game 
-        return { score: 100 }
-    } else if (availableIndeces.length === 0) {
-        // AI and human tie 
-        return { score: 0 }
-    }
-
-    const moves = createMovesArr(board, availableIndeces, playerMark)
-    const bestIdx = bestMoveFromMoves(moves, playerMark);
-    return moves[bestIdx];
-}
-
 function createMovesArr(board, availableIndeces, playerMark) {
     let moves = [];
+    
     for (let i = 0; i < availableIndeces.length; i++) {
         let move = {};
         move.index = availableIndeces[i];
@@ -105,10 +90,38 @@ function createMovesArr(board, availableIndeces, playerMark) {
         result = minimax(board, oppPlayerMark);
         move.score = result.score;
 
-        // simualted spot is retuned to null before next simulated move
+        // simualted spot is returned to null before next simulated move
         board[availableIndeces[i]] = null;
         moves.push(move);
     }
     return moves;
 }
+
+function bestIdxFromMoves(movesArr, playerMark) {
+    let bestIdx;
+    let bestScore;
+    if (playerMark === AIMark) {
+        // AI player aims to maximize score 
+        bestScore = -100000;
+        movesArr.forEach((move, idx) => {
+            if (movesArr[idx].score > bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        })
+    } else {
+        // human player aims to minimize score
+        bestScore = 100000;
+        movesArr.forEach((move, idx) => {
+            if (movesArr[idx].score < bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        }) 
+    }
+    return bestIdx;
+}
+
+
+
 
