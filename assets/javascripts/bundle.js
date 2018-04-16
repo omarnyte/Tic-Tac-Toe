@@ -259,39 +259,57 @@ var Root = function (_React$Component) {
 
         _this.state = {
             AIScore: 0,
-            humanScore: 0
+            humanScore: 0,
+            gameOver: false
         };
-        _this.updateScore = _this.updateScore.bind(_this);
+        _this.handleScoreUpdate = _this.handleScoreUpdate.bind(_this);
+        _this.renderNewGameButton = _this.renderNewGameButton.bind(_this);
         return _this;
     }
 
     _createClass(Root, [{
-        key: 'updateScore',
-        value: function updateScore(winner) {
+        key: 'handleScoreUpdate',
+        value: function handleScoreUpdate(winner) {
             var _state = this.state,
                 AIScore = _state.AIScore,
-                humanScore = _state.humanScore;
+                humanScore = _state.humanScore,
+                gameOver = _state.gameOver;
 
+            gameOver = true;
             if (winner === 'human') {
                 humanScore += 1;
             } else {
                 AIScore += 1;
             }
-            this.setState({ AIScore: AIScore, humanScore: humanScore });
+            this.setState({ AIScore: AIScore, humanScore: humanScore, gameOver: gameOver });
+        }
+    }, {
+        key: 'renderNewGameButton',
+        value: function renderNewGameButton() {
+            return _react2.default.createElement(
+                'button',
+                { className: 'new-game-button' },
+                'New Game'
+            );
         }
     }, {
         key: 'render',
         value: function render() {
             var _state2 = this.state,
                 AIScore = _state2.AIScore,
-                humanScore = _state2.humanScore;
+                humanScore = _state2.humanScore,
+                gameOver = _state2.gameOver;
 
 
             return _react2.default.createElement(
                 'div',
                 { className: 'app-div' },
-                _react2.default.createElement(_board2.default, { updateScore: this.updateScore }),
-                _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore })
+                _react2.default.createElement(_board2.default, {
+                    gameOver: gameOver,
+                    updateScore: this.handleScoreUpdate
+                }),
+                _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore }),
+                this.renderNewGameButton()
             );
         }
     }]);
@@ -347,8 +365,7 @@ var Board = function (_React$Component) {
 
         _this.state = {
             board: [null, null, null, null, null, null, null, null, null],
-            currentPlayer: 'human',
-            gameOver: false
+            currentPlayer: 'human'
         };
         _this.handleClick = _this.handleClick.bind(_this);
         _this.makeMove = _this.makeMove.bind(_this);
@@ -366,9 +383,8 @@ var Board = function (_React$Component) {
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate() {
-            var _state = this.state,
-                currentPlayer = _state.currentPlayer,
-                gameOver = _state.gameOver;
+            var gameOver = this.props.gameOver;
+            var currentPlayer = this.state.currentPlayer;
 
             if (currentPlayer === 'AI' && !gameOver) this.makeMove();
         }
@@ -379,21 +395,21 @@ var Board = function (_React$Component) {
         key: 'handleClick',
         value: function handleClick(e) {
             var board = this.state.board.slice();
-            var _state2 = this.state,
-                currentPlayer = _state2.currentPlayer,
-                gameOver = _state2.gameOver;
+            var currentPlayer = this.state.currentPlayer;
+            var gameOver = this.props.gameOver;
 
             var squareIdx = e.target.dataset.idx;
-            // do nothing if sqaure is already marked or if game is over
+            // do nothing if square is already marked or if game is over
             if (board[squareIdx] !== null || gameOver) return;
             board[squareIdx] = 'X';
 
             if ((0, _AILogic.isWinningMove)(board, 'X')) {
-                gameOver = true;
+                this.props.updateScore('human');
+                return;
             } else {
                 currentPlayer = 'AI';
             }
-            this.setState({ board: board, currentPlayer: currentPlayer, gameOver: gameOver });
+            this.setState({ board: board, currentPlayer: currentPlayer });
         }
 
         // helper methods 
@@ -402,30 +418,28 @@ var Board = function (_React$Component) {
         key: 'makeMove',
         value: function makeMove() {
             var board = this.state.board.slice();
-            var _state3 = this.state,
-                currentPlayer = _state3.currentPlayer,
-                gameOver = _state3.gameOver;
+            var currentPlayer = this.state.currentPlayer;
 
 
             var idx = (0, _AILogic.bestMoveIndex)(board);
             board[idx] = 'O';
 
             if ((0, _AILogic.isWinningMove)(board, 'O')) {
-                gameOver = true;
+                this.props.updateScore('AI');
+                return;
             } else {
                 currentPlayer = 'human';
             }
-            this.setState({ board: board, currentPlayer: currentPlayer, gameOver: gameOver });
+            this.setState({ board: board, currentPlayer: currentPlayer });
         }
     }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            var _state4 = this.state,
-                board = _state4.board,
-                currentPlayer = _state4.currentPlayer,
-                gameOver = _state4.gameOver;
+            var _state = this.state,
+                board = _state.board,
+                currentPlayer = _state.currentPlayer;
 
             return _react2.default.createElement(
                 'ul',
@@ -514,7 +528,7 @@ var Scoreboard = function (_React$Component) {
                     _react2.default.createElement(
                         "span",
                         null,
-                        "AI:"
+                        "Computer:"
                     ),
                     _react2.default.createElement(
                         "span",

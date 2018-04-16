@@ -14,8 +14,7 @@ export default class Board extends React.Component {
                 null, null, null,
                 null, null, null
             ],
-            currentPlayer: 'human',
-            gameOver: false
+            currentPlayer: 'human'
         }
         this.handleClick = this.handleClick.bind(this);
         this.makeMove = this.makeMove.bind(this);
@@ -27,45 +26,49 @@ export default class Board extends React.Component {
     }
 
     componentDidUpdate(){
-        const { currentPlayer, gameOver } = this.state;
+        const { gameOver } = this.props;
+        const { currentPlayer } = this.state;
         if (currentPlayer === 'AI' && !gameOver) this.makeMove();
     }
 
     // handlers 
     handleClick(e) {
         let board = this.state.board.slice();
-        let { currentPlayer, gameOver } = this.state;
+        let { currentPlayer } = this.state;
+        const { gameOver } = this.props;
         const squareIdx = e.target.dataset.idx;
-        // do nothing if sqaure is already marked or if game is over
+        // do nothing if square is already marked or if game is over
         if (board[squareIdx] !== null || gameOver) return;
         board[squareIdx] = 'X';
 
         if (isWinningMove(board, 'X')) {
-            gameOver = true;
+            this.props.updateScore('human');
+            return;
         } else {
             currentPlayer = 'AI';
         }
-        this.setState({ board, currentPlayer, gameOver });
+        this.setState({ board, currentPlayer });
     }
 
     // helper methods 
     makeMove() {                
         let board = this.state.board.slice();
-        let { currentPlayer, gameOver } = this.state;
+        let { currentPlayer } = this.state;
         
         const idx = bestMoveIndex(board);
         board[idx] = 'O';
 
         if (isWinningMove(board, 'O')) {
-            gameOver = true;
+            this.props.updateScore('AI');
+            return;
         } else {
             currentPlayer = 'human';
         }
-        this.setState({ board, currentPlayer, gameOver });
+        this.setState({ board, currentPlayer });
     }
     
     render() {
-        const { board, currentPlayer, gameOver } = this.state;
+        const { board, currentPlayer } = this.state;
         return (
             <ul 
                 className="board-ul"

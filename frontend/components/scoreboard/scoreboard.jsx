@@ -13,7 +13,7 @@ export default class Scoreboard extends React.Component {
                     <span className="player-score">{this.props.humanScore}</span>
                 </div>
                 <div className="AI-score-div">
-                    <span>AI:</span>
+                    <span>Computer:</span>
                     <span className="AI-score">{this.props.AIScore}</span>
                 </div>
             </div>

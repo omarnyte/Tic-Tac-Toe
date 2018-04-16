@@ -9,31 +9,43 @@ class Root extends React.Component {
         super(props);
         this.state = {
             AIScore: 0,
-            humanScore: 0
+            humanScore: 0,
+            gameOver: false
         }
-        this.updateScore = this.updateScore.bind(this);
+        this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+        this.renderNewGameButton = this.renderNewGameButton.bind(this);
     }
 
-    updateScore(winner) {
-        let { AIScore, humanScore } = this.state;
+    handleScoreUpdate(winner) {
+        let { AIScore, humanScore, gameOver } = this.state;
+        gameOver = true;
         if (winner === 'human') {
             humanScore += 1;
         } else {
             AIScore += 1;
         }
-        this.setState({ AIScore, humanScore })
+        this.setState({ AIScore, humanScore, gameOver })
+    }
+
+    renderNewGameButton() {
+        return (
+            <button className='new-game-button'>New Game</button>
+        );
     }
 
     render() {
-        const { AIScore, humanScore } = this.state;
+        const { AIScore, humanScore, gameOver } = this.state;
         
         return (
         <div className="app-div">
-            <Board updateScore={ this.updateScore } />
-            <Scoreboard AIScore={AIScore} humanScore={humanScore} />
+            <Board 
+                gameOver={ gameOver }
+                updateScore={this.handleScoreUpdate}  
+            />
+            <Scoreboard AIScore={ AIScore } humanScore={ humanScore } />
+            { this.renderNewGameButton() }
         </div>
         )
-        
     }
 }
 
