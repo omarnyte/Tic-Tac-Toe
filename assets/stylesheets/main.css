@@ -1,9 +1,19 @@
 body {
-    background: #6b5b95;
+    /* background: #6b5b95; */
+    background: black;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
 h1, h2, p, span {
+    font-family: 'Press Start 2P', cursive;
     color: #FFDE00;
+}
+
+h1 {
+    margin-top: 5%; 
 }
 
 li {
@@ -13,6 +23,8 @@ li {
 .board-ul {
     height: 155px;
     width: 160px; 
+    margin-top: 5%;
+    margin-bottom: 5%;
 
     display: flex;
     flex-wrap: wrap;
@@ -21,10 +33,78 @@ li {
 .square-li {
     height: 32%; 
     width: 32%;
-
-    border: 1px solid #feb236;
-
+    
+    /* border: 1px solid #feb236; */
+    
     display: flex;
     justify-content: center;
     align-items: center; 
+}
+
+.square-li.bottom {
+    border-top: 3px solid #feb236;
+}
+
+.square-li.left {
+    border-right: 3px solid #feb236;
+}
+
+.square-li.top {
+    border-bottom: 3px solid #feb236;
+}
+
+.square-li.right {
+    border-left: 3px solid #feb236;
+}
+
+.square-li:hover {
+    cursor: pointer;
+}
+.square-li.selected:hover {
+    cursor: default
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px
+    }
+    
+    .board-ul {
+        width: 400px;
+        height: 400px; 
+    }
+
+    .square-span {
+        font-size: 40px; 
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    h1 {
+        font-size: 40px
+    }
+    
+    .board-ul {
+        width: 500px;
+        height: 500px; 
+    }
+
+    .square-span {
+        font-size: 60px; 
+    }
+}
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: 50px
+    }
+    
+    .board-ul {
+        width: 600px;
+        height: 600px; 
+    }
+
+    .square-span {
+        font-size: 80px; 
+    }
 }

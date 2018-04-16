@@ -289,7 +289,7 @@ var Root = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'root-div' },
+                { className: 'app-div' },
                 _react2.default.createElement(_board2.default, { updateScore: this.updateScore }),
                 _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore })
             );
@@ -562,11 +562,15 @@ function Square(props) {
     var row = Math.floor(idx / 3);
 
     var status = mark === null ? '' : 'selected';
+    var top = idx >= 0 && idx <= 2 ? 'top' : '';
+    var bottom = idx >= 6 && idx <= 8 ? 'bottom' : '';
+    var left = idx % 3 === 0 ? 'left' : '';
+    var right = idx % 3 === 2 ? 'right' : '';
 
     return _react2.default.createElement(
         'li',
         {
-            className: 'square-li',
+            className: 'square-li ' + status + ' ' + top + ' ' + bottom + ' ' + left + ' ' + right,
             'data-idx': idx,
             'data-col': col,
             'data-row': row,

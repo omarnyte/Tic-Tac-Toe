@@ -28,7 +28,7 @@ class Root extends React.Component {
         const { AIScore, humanScore } = this.state;
         
         return (
-        <div className="root-div">
+        <div className="app-div">
             <Board updateScore={ this.updateScore } />
             <Scoreboard AIScore={AIScore} humanScore={humanScore} />
         </div>
