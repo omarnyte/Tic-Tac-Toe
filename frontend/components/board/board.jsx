@@ -33,7 +33,6 @@ export default class Board extends React.Component {
 
     // handlers 
     handleClick(e) {
-        console.log('handling click')
         let board = this.state.board.slice();
         let { currentPlayer, gameOver } = this.state;
         const squareIdx = e.target.dataset.idx;
@@ -50,18 +49,10 @@ export default class Board extends React.Component {
     }
 
     // helper methods 
-    makeMove() {        
-        console.log('making move');
-        
+    makeMove() {                
         let board = this.state.board.slice();
         let { currentPlayer, gameOver } = this.state;
         
-        // test 
-        // let availableSquares = [];
-        // board.forEach((square, idx) => {
-        //     if (square === null) availableSquares.push(idx);
-        // })
-        // board[availableSquares[0]] = 'O';
         const idx = bestMoveIndex(board);
         board[idx] = 'O';
 
@@ -71,16 +62,10 @@ export default class Board extends React.Component {
             currentPlayer = 'human';
         }
         this.setState({ board, currentPlayer, gameOver });
-
-        // const idx = bestMoveIndex(board);
-        // board[idx] = 'O';
-        // currentPlayer = 'human';
-        // this.setState({ board });
     }
     
     render() {
         const { board, currentPlayer, gameOver } = this.state;
-        console.log(this.state)
         return (
             <ul 
                 className="board-ul"

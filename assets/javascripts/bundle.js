@@ -113,8 +113,11 @@ function emptySquareIndeces(board) {
 }
 
 var isWinningMove = exports.isWinningMove = function isWinningMove(board, player) {
-    // const numMarks = board.filter(square => square !== null).length;
-    // if (numMarks < 6) return false;
+    // return false early if there aren't enough filled squares to end a game
+    var numMarks = board.filter(function (square) {
+        return square !== null;
+    }).length;
+    if (numMarks < 6) return false;
 
     var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
@@ -132,6 +135,31 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
     return false;
 };
 
+function bestMoveFromMoves(movesArr, playerMark) {
+    var bestIdx = void 0;
+    var bestScore = void 0;
+    if (playerMark === AIMark) {
+        // AI player aims to maximize score 
+        bestScore = -100000;
+        for (var i = 0; i < movesArr.length; i++) {
+            if (movesArr[i].score > bestScore) {
+                bestScore = movesArr[i].score;
+                bestIdx = i;
+            }
+        }
+    } else {
+        // human player aims to minimize score 
+        bestScore = 100000;
+        for (var _i = 0; _i < movesArr.length; _i++) {
+            if (movesArr[_i].score < bestScore) {
+                bestScore = movesArr[_i].score;
+                bestIdx = _i;
+            }
+        }
+    }
+    return bestIdx;
+}
+
 function minimax(board, playerMark) {
     var availableIndeces = emptySquareIndeces(board);
 
@@ -147,7 +175,12 @@ function minimax(board, playerMark) {
         return { score: 0 };
     }
 
-    // TODO move to helper method 
+    var moves = createMovesArr(board, availableIndeces, playerMark);
+    var bestIdx = bestMoveFromMoves(moves, playerMark);
+    return moves[bestIdx];
+}
+
+function createMovesArr(board, availableIndeces, playerMark) {
     var moves = [];
     for (var i = 0; i < availableIndeces.length; i++) {
         var move = {};
@@ -165,31 +198,7 @@ function minimax(board, playerMark) {
         board[availableIndeces[i]] = null;
         moves.push(move);
     }
-
-    // TODO move to helper method
-    var bestMove = void 0;
-    var bestScore = void 0;
-    if (playerMark === AIMark) {
-        // AI player aims to maximize score 
-        bestScore = -100000;
-        for (var _i = 0; _i < moves.length; _i++) {
-            if (moves[_i].score > bestScore) {
-                bestScore = moves[_i].score;
-                bestMove = _i;
-            }
-        }
-    } else {
-        // human player aims to minimize score 
-        bestScore = 100000;
-        for (var _i2 = 0; _i2 < moves.length; _i2++) {
-            if (moves[_i2].score < bestScore) {
-                bestScore = moves[_i2].score;
-                bestMove = _i2;
-            }
-        }
-    }
-
-    return moves[bestMove];
+    return moves;
 }
 
 /***/ }),
@@ -271,7 +280,7 @@ var Root = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'root-div' },
-                _react2.default.createElement(_board2.default, { onWin: this.updateScore }),
+                _react2.default.createElement(_board2.default, { updateScore: this.updateScore }),
                 _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore })
             );
         }
@@ -359,7 +368,6 @@ var Board = function (_React$Component) {
     }, {
         key: 'handleClick',
         value: function handleClick(e) {
-            console.log('handling click');
             var board = this.state.board.slice();
             var _state2 = this.state,
                 currentPlayer = _state2.currentPlayer,
@@ -383,19 +391,11 @@ var Board = function (_React$Component) {
     }, {
         key: 'makeMove',
         value: function makeMove() {
-            console.log('making move');
-
             var board = this.state.board.slice();
             var _state3 = this.state,
                 currentPlayer = _state3.currentPlayer,
                 gameOver = _state3.gameOver;
 
-            // test 
-            // let availableSquares = [];
-            // board.forEach((square, idx) => {
-            //     if (square === null) availableSquares.push(idx);
-            // })
-            // board[availableSquares[0]] = 'O';
 
             var idx = (0, _AILogic.bestMoveIndex)(board);
             board[idx] = 'O';
@@ -406,11 +406,6 @@ var Board = function (_React$Component) {
                 currentPlayer = 'human';
             }
             this.setState({ board: board, currentPlayer: currentPlayer, gameOver: gameOver });
-
-            // const idx = bestMoveIndex(board);
-            // board[idx] = 'O';
-            // currentPlayer = 'human';
-            // this.setState({ board });
         }
     }, {
         key: 'render',
@@ -422,7 +417,6 @@ var Board = function (_React$Component) {
                 currentPlayer = _state4.currentPlayer,
                 gameOver = _state4.gameOver;
 
-            console.log(this.state);
             return _react2.default.createElement(
                 'ul',
                 {
@@ -551,23 +545,26 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Square(props) {
-    var idx = props.idx;
+    var idx = props.idx,
+        mark = props.mark;
 
     var col = idx % 3;
     var row = Math.floor(idx / 3);
 
+    var status = mark === null ? '' : 'selected';
+
     return _react2.default.createElement(
-        "li",
+        'li',
         {
-            className: "square-li",
-            "data-idx": idx,
-            "data-col": col,
-            "data-row": row,
+            className: 'square-li',
+            'data-idx': idx,
+            'data-col': col,
+            'data-row': row,
             onClick: props.onClick
         },
         _react2.default.createElement(
-            "span",
-            null,
+            'span',
+            { className: 'square-span ' + status },
             props.mark
         )
     );

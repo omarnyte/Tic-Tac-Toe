@@ -29,7 +29,7 @@ class Root extends React.Component {
         
         return (
         <div className="root-div">
-            <Board onWin={ this.updateScore} />
+            <Board updateScore={ this.updateScore } />
             <Scoreboard AIScore={AIScore} humanScore={humanScore} />
         </div>
         )
