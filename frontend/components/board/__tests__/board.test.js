@@ -1,10 +1,30 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, render, shallow } from 'enzyme';
 
 import Board from '../board.jsx';
 
 describe('Board component', () => {
-    test('Board is mounted without any marks', () => {
+    // describe('tracking scores', () => {
+    //     const scoreboardWrapper = mount(
+    //         <Scoreboard />
+    //     );
+
+    //     const aiScore = scoreboardWrapper.find('.AI-score');
+    //     console.log(('aiScore', aiScore));
+    //     const playerScore = scoreboardWrapper.find('.player-score');
+    //     console.log(('playerScore', playerScore));
+
+
+    //     test('AI begins with a score of 0', () => {
+    //         expect(playerScore.text()).toBe('0');
+    //     });
+
+    //     test('player begins with a score of 0', () => {
+    //         expect(aiScore.text()).toBe('0');
+    //     });
+    // });
+    
+    test('initial Board is mounted without any marks', () => {
         const boardWrapper = mount(
             <Board gameOver="false" />
         );
@@ -13,7 +33,5 @@ describe('Board component', () => {
         ];
         console.log(emptyBoard.state)
     });
-    
-
 });
 

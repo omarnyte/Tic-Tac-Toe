@@ -22,7 +22,7 @@ li {
 
 .app-div {
     position: relative; 
-    margin-bottom: 3%;
+    margin-bottom: 2%;
 
     display: flex; 
     flex-direction: column;
@@ -30,11 +30,17 @@ li {
     justify-content: space-between
 }
 
+.board-component-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .board-ul {
     height: 155px;
     width: 160px; 
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin-top: 3%;
+    margin-bottom: 3%;
 
     display: flex;
     flex-wrap: wrap;
@@ -58,6 +64,7 @@ code for blinker found at: https://stackoverflow.com/questions/16344354/how-to-m
 
 .new-game-button {
     padding: 2%;
+    margin-bottom: 2%;
     border: 1px solid #feb236; 
     box-shadow: -1px -1px;
 }
