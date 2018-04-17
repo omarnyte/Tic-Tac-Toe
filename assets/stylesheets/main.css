@@ -21,6 +21,7 @@ li {
 }
 
 .app-div {
+    position: relative; 
     margin-bottom: 3%;
 
     display: flex; 
@@ -37,6 +38,22 @@ li {
 
     display: flex;
     flex-wrap: wrap;
+}
+/* 
+code for blinker found at: https://stackoverflow.com/questions/16344354/how-to-make-blinking-flashing-text-with-css-3#16344389 */
+.game-over-span {
+    font-size: 40px;
+    position: absolute;
+    top: calc(45% - 20px);
+    left: calc(50% - 180px);
+    color: red;
+    animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+    opacity: 0;
+  }
 }
 
 .new-game-button {
