@@ -9,11 +9,11 @@
 * React
 
 ## Artificial Intelligence ## 
-This version of Tic Tac Toe employs the [minimax algorithm](https://en.wikipedia.org/wiki/Minimax) to ensure that the user can never win. The algorithm recursively "sees ahead" by simulating the end result of every available move. Every end result is given a score (-100 for a human win; 100 for AI win; and 0 for a tie). It assumes that it's opponent (i.e. the human player) will seek to maximize their own score. By rating every leaf node of the recursive tree, it can determine the best possible move to make. 
+This version of Tic Tac Toe employs the [minimax algorithm](https://en.wikipedia.org/wiki/Minimax) to ensure that the user can never win. The algorithm recursively "sees ahead" by simulating the end result of every available move. Every end result is given a score (-100 for a human win; 100 for AI win; and 0 for a tie). It assumes that its opponent (i.e. the human player) will seek to maximize their own score. By rating every leaf node of the recursive tree, it can determine the best possible move to make. 
 
 ```JavaScript
 function minimax(board, playerMark) {
-    // determine all non-null indeces of board array 
+    // determine all non-null indices of board array 
     let availableIndeces = emptySquareIndeces(board);
 
     // recursive base cases  

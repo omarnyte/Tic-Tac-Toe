@@ -3,13 +3,13 @@ import * as AILogic from "../AILogic.js";
 describe('AI Logic', () => {
     describe('bestMoveIndex()', () => {
         test('AI picks a corner on first move', () => {
-            const cornerIndeces = [0, 2, 5, 8];
+            const cornerIndices = [0, 2, 5, 8];
             const board = [
                 null, null, null,
                 null, null, null,
                 null, null, null
             ];
-            expect(cornerIndeces).toContain(AILogic.bestMoveIndex(board));
+            expect(cornerIndices).toContain(AILogic.bestMoveIndex(board));
         });
         test('AI picks winning move (if possible)', () => {
             const board = [
@@ -57,14 +57,14 @@ describe('AI Logic', () => {
             expect(AILogic.isWinningMove(noWinBoard, 'X')).toBe(false);
         });
 
-        test('createMovesArr(board, availableIndeces, playerMark)', () => {
+        test('createMovesArr(board, availableIndices, playerMark)', () => {
             const board = [
                 'O', null, 'X',
                 'X', 'O', null,
                 'X', 'O', 'X'
             ]
-            const availableIndeces = [1, 5];
-            const testObjects = AILogic.createMovesArr(board, availableIndeces, 'O');
+            const availableIndices = [1, 5];
+            const testObjects = AILogic.createMovesArr(board, availableIndices, 'O');
             expect(testObjects[0].index).toBe(1);
             expect(testObjects[0].score).toBe(100);
             expect(testObjects[1].index).toBe(5);
