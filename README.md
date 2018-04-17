@@ -1,4 +1,5 @@
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
+[![Coverage Status](https://coveralls.io/repos/github/omarnyte/Tic-Tac-Toe/badge.svg?branch=master)](https://coveralls.io/github/omarnyte/Tic-Tac-Toe?branch=master)
 
 # Tic Tac Toe #
 
