@@ -98,6 +98,7 @@ export const bestIdxFromMoves = (movesArr, playerMark) => {
 
 ## Design ##
 The board is styled entirely with pure CSS. Breakpoints are used to ensure that the game renders appropriately on smaller screens. 
+
 ![break points animation](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/break-points.gif)
 
 
@@ -112,6 +113,7 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 * The AI logic is fully tested using the [Jest](https://facebook.github.io/jest/) testing framework. 
 * Every React component is tested using [Enzyme](http://airbnb.io/enzyme/). 
 * Together, these frameworks cover 96% of the application's JavaScript.
+
 
 ![test coverage breakdown](github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
 
