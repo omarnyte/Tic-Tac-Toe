@@ -38,6 +38,53 @@ function minimax(board, playerMark) {
     // return the best move object
     return moves[bestIdx];
 }
+
+export const createMovesArr = (board, availableIndices, playerMark) => {
+    let moves = [];
+    
+    for (let i = 0; i < availableIndices.length; i++) {
+        let move = {};
+        move.index = availableIndices[i];
+        // simulate move by current player 
+        board[availableIndices[i]] = playerMark;
+
+        // pass simulated board down to next depth with opposing player as current player  
+        let result;
+        const oppPlayerMark = (playerMark === AIMark ? humanMark : AIMark);
+        result = minimax(board, oppPlayerMark);
+        move.score = result.score;
+
+        // simualted spot is returned to null before next simulated move
+        board[availableIndices[i]] = null;
+        moves.push(move);
+    }
+    return moves;
+}
+
+export const bestIdxFromMoves = (movesArr, playerMark) => {
+    let bestIdx;
+    let bestScore;
+    if (playerMark === AIMark) {
+        // AI player aims to maximize score 
+        bestScore = -100000;
+        movesArr.forEach((move, idx) => {
+            if (movesArr[idx].score > bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        })
+    } else {
+        // human player aims to minimize score
+        bestScore = 100000;
+        movesArr.forEach((move, idx) => {
+            if (movesArr[idx].score < bestScore) {
+                bestScore = movesArr[idx].score;
+                bestIdx = idx;
+            }
+        }) 
+    }
+    return bestIdx;
+}
 ``` 
 
 ## React Component Hierarchy ## 
