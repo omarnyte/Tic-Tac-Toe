@@ -8,6 +8,13 @@
 * JavaScript
 * React
 
+## Gameplay ##
+The game is simple. You, the human, chooses first. Your objective is to get 3 X's in a row, column, or diagonal. Simply click the empty square you wish to fill.
+![tied game](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/tie.gif)
+
+When you lose the game (sorry--the AI is unbeatable!), you can start a new game by clicking the *New Game* button on the bottom of the screen. 
+![new game](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/new-game.gif)
+
 ## Artificial Intelligence ## 
 This version of Tic Tac Toe employs the [minimax algorithm](https://en.wikipedia.org/wiki/Minimax) to ensure that the user can never win. The algorithm recursively "sees ahead" by simulating the end result of every available move. Every end result is given a score (-100 for a human win; 100 for AI win; and 0 for a tie). It assumes that its opponent (i.e. the human player) will seek to maximize their own score. By rating every leaf node of the recursive tree, it can determine the best possible move to make. 
 
@@ -88,6 +95,10 @@ export const bestIdxFromMoves = (movesArr, playerMark) => {
 ``` 
 
 ## Design ##
+The board is styled entirely with pure CSS. Breakpoints are used to ensure that the game renders appropriately on smaller screens. 
+![break points animation](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/break-points.gif)
+
+
 
 ## React Component Hierarchy ## 
 * \<App /> 
