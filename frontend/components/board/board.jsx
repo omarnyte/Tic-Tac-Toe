@@ -2,6 +2,7 @@ import React from 'react';
 
 import { 
     bestMoveIndex, 
+    emptySquareIndices,
     isWinningMove } from '../../../assets/javascripts/AILogic';
 import Square from '../square/square.jsx';
 
@@ -24,7 +25,6 @@ export default class Board extends React.Component {
     componentDidMount(){        
         if (this.state.currentPlayer === 'AI') this.makeMove();
 
-        let currentPlayer = 'human'; 
         const newGameButton = document.querySelector('.new-game-button');
         newGameButton.addEventListener('click', this.newGame.bind(this));
     }
@@ -49,10 +49,13 @@ export default class Board extends React.Component {
 
         if (isWinningMove(board, 'X')) {
             this.props.updateScore('human');
+        } else if (emptySquareIndices(board).length === 0) {
+            // if game is tied
+            this.props.tieGame(board);
         } else {
             currentPlayer = 'AI';
+            this.setState({ board, currentPlayer });
         }
-        this.setState({ board, currentPlayer });
     }
 
     newGame() {
@@ -76,10 +79,13 @@ export default class Board extends React.Component {
 
         if (isWinningMove(board, 'O')) {
             this.props.updateScore('AI');
+        } else if(emptySquareIndices(board).length === 0) {
+            // if game is tied
+            this.props.tieGame(board);
         } else {
             currentPlayer = 'human';
+            this.setState({ board, currentPlayer });
         }
-        this.setState({ board, currentPlayer });
     }
     
     render() {
@@ -99,7 +105,7 @@ export default class Board extends React.Component {
                     })
                 }
             </ul>
-        )
+        );
     }
 
 } 

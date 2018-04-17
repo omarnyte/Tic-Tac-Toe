@@ -84,7 +84,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.bestIdxFromMoves = exports.createMovesArr = exports.isWinningMove = exports.bestMoveIndex = undefined;
+exports.bestIdxFromMoves = exports.createMovesArr = exports.isWinningMove = exports.emptySquareIndices = exports.bestMoveIndex = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -133,13 +133,13 @@ function minimax(board, playerMark) {
     return moves[bestIdx];
 }
 
-function emptySquareIndices(arr) {
+var emptySquareIndices = exports.emptySquareIndices = function emptySquareIndices(arr) {
     var result = [];
     arr.forEach(function (square, idx) {
         if (!square) result.push(idx);
     });
     return result;
-}
+};
 
 var isWinningMove = exports.isWinningMove = function isWinningMove(board, playerMark) {
     // return false early if there aren't enough filled squares to end a game
@@ -263,7 +263,8 @@ var Root = function (_React$Component) {
             gameOver: false
         };
         _this.handleScoreUpdate = _this.handleScoreUpdate.bind(_this);
-        _this.handleButtonClick = _this.handleButtonClick.bind(_this);
+        _this.handleNewGameButton = _this.handleNewGameButton.bind(_this);
+        _this.handleTie = _this.handleTie.bind(_this);
         _this.renderGameOver = _this.renderGameOver.bind(_this);
         return _this;
     }
@@ -272,8 +273,8 @@ var Root = function (_React$Component) {
 
 
     _createClass(Root, [{
-        key: 'handleButtonClick',
-        value: function handleButtonClick() {
+        key: 'handleNewGameButton',
+        value: function handleNewGameButton() {
             var gameOver = false;
             this.setState({ gameOver: gameOver });
         }
@@ -292,6 +293,11 @@ var Root = function (_React$Component) {
                 AIScore += 1;
             }
             this.setState({ AIScore: AIScore, humanScore: humanScore, gameOver: gameOver });
+        }
+    }, {
+        key: 'handleTie',
+        value: function handleTie() {
+            this.setState({ gameOver: true });
         }
 
         // render functions 
@@ -333,6 +339,7 @@ var Root = function (_React$Component) {
                 { className: 'app-div' },
                 _react2.default.createElement(_board2.default, {
                     gameOver: gameOver,
+                    tieGame: this.handleTie,
                     updateScore: this.handleScoreUpdate
                 }),
                 _react2.default.createElement(_scoreboard2.default, {
@@ -412,7 +419,6 @@ var Board = function (_React$Component) {
         value: function componentDidMount() {
             if (this.state.currentPlayer === 'AI') this.makeMove();
 
-            var currentPlayer = 'human';
             var newGameButton = document.querySelector('.new-game-button');
             newGameButton.addEventListener('click', this.newGame.bind(this));
         }
@@ -443,10 +449,13 @@ var Board = function (_React$Component) {
 
             if ((0, _AILogic.isWinningMove)(board, 'X')) {
                 this.props.updateScore('human');
+            } else if ((0, _AILogic.emptySquareIndices)(board).length === 0) {
+                // if game is tied
+                this.props.tieGame(board);
             } else {
                 currentPlayer = 'AI';
+                this.setState({ board: board, currentPlayer: currentPlayer });
             }
-            this.setState({ board: board, currentPlayer: currentPlayer });
         }
     }, {
         key: 'newGame',
@@ -471,10 +480,13 @@ var Board = function (_React$Component) {
 
             if ((0, _AILogic.isWinningMove)(board, 'O')) {
                 this.props.updateScore('AI');
+            } else if ((0, _AILogic.emptySquareIndices)(board).length === 0) {
+                // if game is tied
+                this.props.tieGame(board);
             } else {
                 currentPlayer = 'human';
+                this.setState({ board: board, currentPlayer: currentPlayer });
             }
-            this.setState({ board: board, currentPlayer: currentPlayer });
         }
     }, {
         key: 'render',

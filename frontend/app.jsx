@@ -13,12 +13,13 @@ class Root extends React.Component {
             gameOver: false
         }
         this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
-        this.handleButtonClick = this.handleButtonClick.bind(this); 
+        this.handleNewGameButton = this.handleNewGameButton.bind(this);
+        this.handleTie = this.handleTie.bind(this); 
         this.renderGameOver = this.renderGameOver.bind(this); 
     }
 
     // handlers 
-    handleButtonClick() {
+    handleNewGameButton() {
         let gameOver = false;
         this.setState({ gameOver });
     }
@@ -31,7 +32,11 @@ class Root extends React.Component {
         } else {
             AIScore += 1;
         }
-        this.setState({ AIScore, humanScore, gameOver })
+        this.setState({ AIScore, humanScore, gameOver });
+    }
+
+    handleTie() {
+        this.setState({ gameOver: true });
     }
 
     // render functions 
@@ -59,6 +64,7 @@ class Root extends React.Component {
         <div className="app-div">
             <Board 
                 gameOver={ gameOver }
+                tieGame={ this.handleTie }
                 updateScore={ this.handleScoreUpdate }  
             />
             <Scoreboard 
@@ -69,7 +75,7 @@ class Root extends React.Component {
             { this.renderNewGameButton() }
             { this.renderGameOver()  } 
         </div>
-        )
+        );
     }
 }
 

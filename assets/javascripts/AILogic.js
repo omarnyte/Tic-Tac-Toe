@@ -41,7 +41,7 @@ function minimax(board, playerMark) {
     return moves[bestIdx];
 }
 
-function emptySquareIndices(arr) {
+export const emptySquareIndices = (arr) => {
     const result = [];
     arr.forEach((square, idx) => {
         if (!square) result.push(idx);
