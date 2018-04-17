@@ -368,27 +368,10 @@ var Board = function (_React$Component) {
             }
             this.setState({ board: board, currentPlayer: currentPlayer });
         }
-
-        // render methods
-
-    }, {
-        key: 'renderSquares',
-        value: function renderSquares() {
-            var _this2 = this;
-
-            this.state.board.map(function (square, idx) {
-                return _react2.default.createElement(_square2.default, {
-                    key: idx,
-                    idx: idx,
-                    mark: board[idx],
-                    onClick: _this2.handleClick
-                });
-            });
-        }
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
             var _state = this.state,
                 board = _state.board,
@@ -405,7 +388,7 @@ var Board = function (_React$Component) {
                             key: idx,
                             idx: idx,
                             mark: board[idx],
-                            onClick: _this3.handleClick
+                            onClick: _this2.handleClick
                         });
                     })
                 ),
@@ -485,6 +468,7 @@ var Game = function (_React$Component) {
     }
 
     // handlers 
+
 
     _createClass(Game, [{
         key: 'handleScoreUpdate',
@@ -590,13 +574,8 @@ function ScoreBoard(props) {
             { className: "player-score-div" },
             _react2.default.createElement(
                 "span",
-                null,
-                "Player:"
-            ),
-            _react2.default.createElement(
-                "span",
                 { className: "player-score" },
-                props.humanScore
+                "Player: " + props.humanScore
             )
         ),
         _react2.default.createElement(
@@ -604,13 +583,8 @@ function ScoreBoard(props) {
             { className: "AI-score-div" },
             _react2.default.createElement(
                 "span",
-                null,
-                "Computer:"
-            ),
-            _react2.default.createElement(
-                "span",
                 { className: "AI-score" },
-                props.AIScore
+                "Computer: " + props.AIScore
             )
         )
     );

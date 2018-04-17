@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, render, shallow } from 'enzyme';
+import { mount, render, shallow } from 'enzyme';
 import Square from '../square.jsx';
 
 

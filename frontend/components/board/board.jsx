@@ -87,18 +87,6 @@ export default class Board extends React.Component {
         }
         this.setState({ board, currentPlayer });
     }
-
-    // render methods
-    renderSquares() {
-        this.state.board.map((square, idx) => {
-            return <Square
-                key={idx}
-                idx={idx}
-                mark={board[idx]}
-                onClick={this.handleClick}
-            />
-        })
-    }
     
     render() {
         const { board, currentPlayer } = this.state;

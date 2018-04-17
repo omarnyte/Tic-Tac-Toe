@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development --watch",
     "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage ",
     "test:watch": "jest --watch"
   },
   "keywords": [],
@@ -32,6 +32,8 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/frontend/setUpTests.js",
-    "snapshotSerializers": ["enzyme-to-json/serializer"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }

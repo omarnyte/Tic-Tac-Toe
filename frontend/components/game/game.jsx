@@ -18,7 +18,6 @@ export default class Game extends React.Component {
     }
 
     // handlers 
-    
     handleScoreUpdate(winner) {
         let { AIScore, humanScore, gameOver } = this.state;
         gameOver = true;
@@ -57,7 +56,7 @@ export default class Game extends React.Component {
                     updateScore={ this.handleScoreUpdate }
                 />
                 <Scoreboard
-                    AIScore={AIScore}
+                    AIScore={ AIScore }
                     humanScore={ humanScore }
                 />
                 {this.renderGameOver()}
