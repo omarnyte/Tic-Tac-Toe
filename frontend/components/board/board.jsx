@@ -18,15 +18,13 @@ export default class Board extends React.Component {
             currentPlayer: 'human'
         }
         this.handleClick = this.handleClick.bind(this);
+        this.handleNewGameClick = this.handleNewGameClick.bind(this);
         this.makeMove = this.makeMove.bind(this);
     }
 
     // lifecycle methods 
     componentDidMount(){        
         if (this.state.currentPlayer === 'AI') this.makeMove();
-
-        const newGameButton = document.querySelector('.new-game-button');
-        newGameButton.addEventListener('click', this.newGame.bind(this));
     }
 
     componentDidUpdate(){
@@ -58,7 +56,7 @@ export default class Board extends React.Component {
         this.setState({ board, currentPlayer });
     }
 
-    newGame() {
+    handleNewGameClick(e) {
         this.setState({
             board: [
                 null, null, null,
@@ -67,6 +65,8 @@ export default class Board extends React.Component {
             ],
             currentPlayer: 'human'
         });
+        this.props.removeGameOver();
+
     }
 
     // helper methods 
@@ -103,20 +103,26 @@ export default class Board extends React.Component {
     render() {
         const { board, currentPlayer } = this.state;
         return (
-            <ul 
-                className="board-ul"
-            >
-                {
-                    board.map((square, idx) => {
-                        return <Square 
-                            key={ idx } 
-                            idx={ idx } 
-                            mark={ board[idx] }
-                            onClick = { this.handleClick }
-                        />
-                    })
-                }
-            </ul>
+            <div className='board-component-div'>
+                <ul className="board-ul">
+                    {
+                        board.map((square, idx) => {
+                            return <Square 
+                                key={ idx } 
+                                idx={ idx } 
+                                mark={ board[idx] }
+                                onClick = { this.handleClick }
+                            />
+                        })
+                    }
+                </ul>
+                <button
+                    className='new-game-button'
+                    onClick={ this.handleNewGameClick }
+                >
+                    New Game
+                </button>
+            </div>
         );
     }
 

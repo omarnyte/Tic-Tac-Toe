@@ -3,21 +3,17 @@ import { mount } from 'enzyme';
 
 import Board from '../board.jsx';
 
-// describe('Board component', () => {
-//     describe('tracking scores', () => {
-//         const boardWrapper = mount(
-//             <Board />
-//         );
+describe('Board component', () => {
+    test('Board is mounted without any marks', () => {
+        const boardWrapper = mount(
+            <Board gameOver="false" />
+        );
+        const emptyBoard = [
+            null, null, null, null, null, null, null, null, null
+        ];
+        console.log(emptyBoard.state)
+    });
+    
 
-//         test('Board is mounted without any marks', () => {
-//             console.log(boardWrapper.state)
-//         });
-//     });
-// });
-
-// describe('Board component', () => {
-//     const boardWrapper = shallow(
-//         <Board gameOver="false" />
-//     )
-// });
+});
 

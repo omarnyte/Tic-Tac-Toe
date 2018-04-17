@@ -12,17 +12,13 @@ export default class Game extends React.Component {
             gameOver: false
         }
         this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
-        this.handleNewGameButton = this.handleNewGameButton.bind(this);
         this.handleTie = this.handleTie.bind(this);
+        this.removeGameOver = this.removeGameOver.bind(this);
         this.renderGameOver = this.renderGameOver.bind(this);
     }
 
     // handlers 
-    handleNewGameButton() {
-        let gameOver = false;
-        this.setState({ gameOver });
-    }
-
+    
     handleScoreUpdate(winner) {
         let { AIScore, humanScore, gameOver } = this.state;
         gameOver = true;
@@ -33,23 +29,16 @@ export default class Game extends React.Component {
         }
         this.setState({ AIScore, humanScore, gameOver });
     }
-
+    
     handleTie() {
         this.setState({ gameOver: true });
     }
-
-    // render functions 
-    renderNewGameButton() {
-        return (
-            <button
-                className='new-game-button'
-                onClick={this.handleButtonClick}
-            >
-                New Game
-            </button>
-        );
+    
+    removeGameOver() {
+        this.setState({ gameOver: false });
     }
 
+    // render functions 
     renderGameOver() {
         if (this.state.gameOver) {
             return <span className='game-over-span'>GAME OVER</span>
@@ -62,16 +51,15 @@ export default class Game extends React.Component {
         return (
             <div className="app-div">
                 <Board
-                    gameOver={gameOver}
-                    tieGame={this.handleTie}
-                    updateScore={this.handleScoreUpdate}
+                    gameOver={ gameOver }
+                    removeGameOver={ this.removeGameOver }
+                    tieGame={ this.handleTie }
+                    updateScore={ this.handleScoreUpdate }
                 />
                 <Scoreboard
                     AIScore={AIScore}
-                    gameOver={gameOver}
-                    humanScore={humanScore}
+                    humanScore={ humanScore }
                 />
-                {this.renderNewGameButton()}
                 {this.renderGameOver()}
             </div>
         );

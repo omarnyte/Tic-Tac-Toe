@@ -223,8 +223,6 @@ var bestIdxFromMoves = exports.bestIdxFromMoves = function bestIdxFromMoves(move
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
@@ -239,32 +237,7 @@ var _game2 = _interopRequireDefault(_game);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Root = function (_React$Component) {
-    _inherits(Root, _React$Component);
-
-    function Root() {
-        _classCallCheck(this, Root);
-
-        return _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).apply(this, arguments));
-    }
-
-    _createClass(Root, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(_game2.default, null);
-        }
-    }]);
-
-    return Root;
-}(_react2.default.Component);
-
-_reactDom2.default.render(_react2.default.createElement(Root, null), document.getElementById('root'));
+_reactDom2.default.render(_react2.default.createElement(_game2.default, null), document.getElementById('root'));
 
 /***/ }),
 
@@ -315,6 +288,7 @@ var Board = function (_React$Component) {
             currentPlayer: 'human'
         };
         _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleNewGameClick = _this.handleNewGameClick.bind(_this);
         _this.makeMove = _this.makeMove.bind(_this);
         return _this;
     }
@@ -326,9 +300,6 @@ var Board = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             if (this.state.currentPlayer === 'AI') this.makeMove();
-
-            var newGameButton = document.querySelector('.new-game-button');
-            newGameButton.addEventListener('click', this.newGame.bind(this));
         }
     }, {
         key: 'componentDidUpdate',
@@ -366,12 +337,13 @@ var Board = function (_React$Component) {
             this.setState({ board: board, currentPlayer: currentPlayer });
         }
     }, {
-        key: 'newGame',
-        value: function newGame() {
+        key: 'handleNewGameClick',
+        value: function handleNewGameClick(e) {
             this.setState({
                 board: [null, null, null, null, null, null, null, null, null],
                 currentPlayer: 'human'
             });
+            this.props.removeGameOver();
         }
 
         // helper methods 
@@ -423,18 +395,28 @@ var Board = function (_React$Component) {
                 currentPlayer = _state.currentPlayer;
 
             return _react2.default.createElement(
-                'ul',
-                {
-                    className: 'board-ul'
-                },
-                board.map(function (square, idx) {
-                    return _react2.default.createElement(_square2.default, {
-                        key: idx,
-                        idx: idx,
-                        mark: board[idx],
-                        onClick: _this3.handleClick
-                    });
-                })
+                'div',
+                { className: 'board-component-div' },
+                _react2.default.createElement(
+                    'ul',
+                    { className: 'board-ul' },
+                    board.map(function (square, idx) {
+                        return _react2.default.createElement(_square2.default, {
+                            key: idx,
+                            idx: idx,
+                            mark: board[idx],
+                            onClick: _this3.handleClick
+                        });
+                    })
+                ),
+                _react2.default.createElement(
+                    'button',
+                    {
+                        className: 'new-game-button',
+                        onClick: this.handleNewGameClick
+                    },
+                    'New Game'
+                )
             );
         }
     }]);
@@ -496,22 +478,15 @@ var Game = function (_React$Component) {
             gameOver: false
         };
         _this.handleScoreUpdate = _this.handleScoreUpdate.bind(_this);
-        _this.handleNewGameButton = _this.handleNewGameButton.bind(_this);
         _this.handleTie = _this.handleTie.bind(_this);
+        _this.removeGameOver = _this.removeGameOver.bind(_this);
         _this.renderGameOver = _this.renderGameOver.bind(_this);
         return _this;
     }
 
     // handlers 
 
-
     _createClass(Game, [{
-        key: 'handleNewGameButton',
-        value: function handleNewGameButton() {
-            var gameOver = false;
-            this.setState({ gameOver: gameOver });
-        }
-    }, {
         key: 'handleScoreUpdate',
         value: function handleScoreUpdate(winner) {
             var _state = this.state,
@@ -532,21 +507,14 @@ var Game = function (_React$Component) {
         value: function handleTie() {
             this.setState({ gameOver: true });
         }
+    }, {
+        key: 'removeGameOver',
+        value: function removeGameOver() {
+            this.setState({ gameOver: false });
+        }
 
         // render functions 
 
-    }, {
-        key: 'renderNewGameButton',
-        value: function renderNewGameButton() {
-            return _react2.default.createElement(
-                'button',
-                {
-                    className: 'new-game-button',
-                    onClick: this.handleButtonClick
-                },
-                'New Game'
-            );
-        }
     }, {
         key: 'renderGameOver',
         value: function renderGameOver() {
@@ -572,15 +540,14 @@ var Game = function (_React$Component) {
                 { className: 'app-div' },
                 _react2.default.createElement(_board2.default, {
                     gameOver: gameOver,
+                    removeGameOver: this.removeGameOver,
                     tieGame: this.handleTie,
                     updateScore: this.handleScoreUpdate
                 }),
                 _react2.default.createElement(_scoreboard2.default, {
                     AIScore: AIScore,
-                    gameOver: gameOver,
                     humanScore: humanScore
                 }),
-                this.renderNewGameButton(),
                 this.renderGameOver()
             );
         }
