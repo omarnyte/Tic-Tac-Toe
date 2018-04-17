@@ -13,31 +13,30 @@ This version of Tic Tac Toe employs the [minimax algorithm](https://en.wikipedia
 
 ```JavaScript
 function minimax(board, playerMark) {
-    // determine all non-null indices of board array 
-    let availableIndeces = emptySquareIndeces(board);
+    // determine all null indices of board array 
+    let availableIndices = emptySquareIndices(board);
 
     // recursive base cases  
     if (isWinningMove(board, humanMark)) {
         // human wins game
-        return { score: -100 }
+        return { score: -100 };
     } else if (isWinningMove(board, AIMark)) {
         // AI wins game 
-        return { score: 100 }
-    } else if (availableIndeces.length === 0) {
+        return { score: 100 };
+    } else if (availableIndices.length === 0) {
         // AI and human tie 
-        return { score: 0 }
+        return { score: 0 };
     }
 
     // create an array of all possible move objects, each of which contains an 
     // index and a score
-    const moves = createMovesArr(board, availableIndeces, playerMark);    
+    const moves = createMovesArr(board, availableIndices, playerMark);    
 
     // select the index of the best move (from the moves array) by score based on the current player 
     const bestIdx = bestIdxFromMoves(moves, playerMark);
 
     // return the best move object
     return moves[bestIdx];
-}
 }
 ``` 
 

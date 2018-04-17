@@ -15,19 +15,19 @@ export const bestMoveIndex = (board) => {
 }
 
 function minimax(board, playerMark) {
-    // determine all non-null indices of board array 
+    // determine all null indices of board array 
     let availableIndices = emptySquareIndices(board);
 
     // recursive base cases  
     if (isWinningMove(board, humanMark)) {
         // human wins game
-        return { score: -100 }
+        return { score: -100 };
     } else if (isWinningMove(board, AIMark)) {
         // AI wins game 
-        return { score: 100 }
+        return { score: 100 };
     } else if (availableIndices.length === 0) {
         // AI and human tie 
-        return { score: 0 }
+        return { score: 0 };
     }
 
     // create an array of all possible move objects, each of which contains an 
