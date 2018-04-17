@@ -115,7 +115,7 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 * Together, these frameworks cover 96% of the application's JavaScript.
 
 
-![test coverage breakdown](github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
+![test coverage breakdown](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
 
 
 ## Future Features ## 
