@@ -37,8 +37,8 @@ describe('Game component', () => {
         const wrapper = shallow(
             <Game />
         ); 
-        wrapper.setState({ AIScore: 5, humanScore: 5 })
         const instance = wrapper.instance();
+        wrapper.setState({ AIScore: 5, humanScore: 5 })
 
         instance.handleTie();
         expect(wrapper.state().AIScore).toBe(5);
@@ -46,7 +46,7 @@ describe('Game component', () => {
         expect(wrapper.state().gameOver).toBe(true);
     });
 
-    test("removeGameOver() stops the 'Game Over' span from rendering", () => {
+    test("removeGameOver() sets the gameOver state property to false", () => {
         const wrapper = shallow(
             <Game />
         ); 
@@ -55,7 +55,7 @@ describe('Game component', () => {
 
         expect(wrapper.find('.game-over-span').length).toBe(1);
         instance.removeGameOver();
-        expect(wrapper.find('.game-over-span').length).toBe(0);
+        expect(wrapper.state().gameOver).toBe(false);
     });
 });
 

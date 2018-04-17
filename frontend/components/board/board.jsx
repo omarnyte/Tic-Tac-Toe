@@ -17,7 +17,7 @@ export default class Board extends React.Component {
             ],
             currentPlayer: 'human'
         }
-        this.handleClick = this.handleClick.bind(this);
+        this.handleSquareClick = this.handleSquareClick.bind(this);
         this.handleNewGameClick = this.handleNewGameClick.bind(this);
         this.makeMove = this.makeMove.bind(this);
     }
@@ -36,7 +36,8 @@ export default class Board extends React.Component {
     }
 
     // handlers 
-    handleClick(e) {
+    handleSquareClick(e) {
+        console.dir(e.target.dataset)
         let board = this.state.board.slice();
         let { currentPlayer } = this.state;
         const { gameOver } = this.props;
@@ -56,7 +57,7 @@ export default class Board extends React.Component {
         this.setState({ board, currentPlayer });
     }
 
-    handleNewGameClick(e) {
+    handleNewGameClick() {
         this.setState({
             board: [
                 null, null, null,
@@ -99,7 +100,7 @@ export default class Board extends React.Component {
                                 key={ idx } 
                                 idx={ idx } 
                                 mark={ board[idx] }
-                                onClick = { this.handleClick }
+                                onClick = { this.handleSquareClick }
                             />
                         })
                     }

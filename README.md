@@ -87,9 +87,19 @@ export const bestIdxFromMoves = (movesArr, playerMark) => {
 }
 ``` 
 
+## Design ##
+
 ## React Component Hierarchy ## 
 * \<App /> 
     * \<ScoreBoard /> 
     * \<Board /> 
         * \<Square />  
 
+## Testing ##
+* The AI logic is fully tested using the [Jest](https://facebook.github.io/jest/) testing framework. 
+* Every React component is tested using [Enzyme](http://airbnb.io/enzyme/). 
+* Together, these frameworks cover 96% of the application's JavaScript.
+
+## Future Features ## 
+* Allow the user to toggle between playing against the computer and playing against another human player on the same computer. 
+* Implement a backend to allow two players to play against each other using websockets.

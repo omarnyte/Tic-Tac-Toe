@@ -287,7 +287,7 @@ var Board = function (_React$Component) {
             board: [null, null, null, null, null, null, null, null, null],
             currentPlayer: 'human'
         };
-        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleSquareClick = _this.handleSquareClick.bind(_this);
         _this.handleNewGameClick = _this.handleNewGameClick.bind(_this);
         _this.makeMove = _this.makeMove.bind(_this);
         return _this;
@@ -315,8 +315,9 @@ var Board = function (_React$Component) {
         // handlers 
 
     }, {
-        key: 'handleClick',
-        value: function handleClick(e) {
+        key: 'handleSquareClick',
+        value: function handleSquareClick(e) {
+            console.dir(e.target.dataset);
             var board = this.state.board.slice();
             var currentPlayer = this.state.currentPlayer;
             var gameOver = this.props.gameOver;
@@ -338,7 +339,7 @@ var Board = function (_React$Component) {
         }
     }, {
         key: 'handleNewGameClick',
-        value: function handleNewGameClick(e) {
+        value: function handleNewGameClick() {
             this.setState({
                 board: [null, null, null, null, null, null, null, null, null],
                 currentPlayer: 'human'
@@ -388,7 +389,7 @@ var Board = function (_React$Component) {
                             key: idx,
                             idx: idx,
                             mark: board[idx],
-                            onClick: _this2.handleClick
+                            onClick: _this2.handleSquareClick
                         });
                     })
                 ),
