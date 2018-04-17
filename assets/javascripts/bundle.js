@@ -423,7 +423,7 @@ var Board = function (_React$Component) {
             var currentPlayer = this.state.currentPlayer;
 
             if (currentPlayer === 'AI' && !gameOver) {
-                setTimeout(this.makeMove, 500);
+                this.makeMove();
             }
         }
 
