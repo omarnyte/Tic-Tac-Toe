@@ -54,8 +54,8 @@ export default class Board extends React.Component {
             this.props.tieGame(board);
         } else {
             currentPlayer = 'AI';
-            this.setState({ board, currentPlayer });
         }
+        this.setState({ board, currentPlayer });
     }
 
     newGame() {
@@ -84,8 +84,20 @@ export default class Board extends React.Component {
             this.props.tieGame(board);
         } else {
             currentPlayer = 'human';
-            this.setState({ board, currentPlayer });
         }
+        this.setState({ board, currentPlayer });
+    }
+
+    // render methods
+    renderSquares() {
+        this.state.board.map((square, idx) => {
+            return <Square
+                key={idx}
+                idx={idx}
+                mark={board[idx]}
+                onClick={this.handleClick}
+            />
+        })
     }
     
     render() {

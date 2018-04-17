@@ -14,3 +14,10 @@ import Board from '../board.jsx';
 //         });
 //     });
 // });
+
+// describe('Board component', () => {
+//     const boardWrapper = shallow(
+//         <Board gameOver="false" />
+//     )
+// });
+
