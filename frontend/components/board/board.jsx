@@ -32,7 +32,9 @@ export default class Board extends React.Component {
     componentDidUpdate(){
         const { gameOver } = this.props;
         const { currentPlayer } = this.state;
-        if (currentPlayer === 'AI' && !gameOver) this.makeMove();
+        if (currentPlayer === 'AI' && !gameOver) {
+            setTimeout(this.makeMove, 500);
+        }
     }
 
     // handlers 

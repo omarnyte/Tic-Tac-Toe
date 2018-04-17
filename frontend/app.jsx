@@ -14,6 +14,7 @@ class Root extends React.Component {
         }
         this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this); 
+        this.renderGameOver = this.renderGameOver.bind(this); 
     }
 
     // handlers 
@@ -33,6 +34,7 @@ class Root extends React.Component {
         this.setState({ AIScore, humanScore, gameOver })
     }
 
+    // render functions 
     renderNewGameButton() {
         return (
             <button 
@@ -44,6 +46,12 @@ class Root extends React.Component {
         );
     }
 
+    renderGameOver() {
+        if (this.state.gameOver) {
+            return <span className='game-over-span'>GAME OVER</span>
+        }
+    }
+
     render() {
         const { AIScore, humanScore, gameOver } = this.state;
         
@@ -51,10 +59,15 @@ class Root extends React.Component {
         <div className="app-div">
             <Board 
                 gameOver={ gameOver }
-                updateScore={this.handleScoreUpdate}  
+                updateScore={ this.handleScoreUpdate }  
             />
-            <Scoreboard AIScore={ AIScore } humanScore={ humanScore } />
+            <Scoreboard 
+                AIScore={ AIScore } 
+                gameOver={ gameOver }
+                humanScore={ humanScore } 
+            />
             { this.renderNewGameButton() }
+            { this.renderGameOver()  } 
         </div>
         )
     }

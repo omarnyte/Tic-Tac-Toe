@@ -98,8 +98,8 @@ var bestMoveIndex = exports.bestMoveIndex = function bestMoveIndex(board) {
         return square === null;
     }).length === 9) {
         // if AI plays first, pick a random corner 
-        var cornerIndeces = [0, 2, 5, 8];
-        return cornerIndeces[Math.floor(Math.random() * 4)];
+        var cornerIndices = [0, 2, 5, 8];
+        return cornerIndices[Math.floor(Math.random() * 4)];
     } else {
         // otherwise, determine best move (and index) through minimax algorithm 
         return minimax(board, AIMark).index;
@@ -107,8 +107,8 @@ var bestMoveIndex = exports.bestMoveIndex = function bestMoveIndex(board) {
 };
 
 function minimax(board, playerMark) {
-    // determine all non-null indeces of board array 
-    var availableIndeces = emptySquareIndeces(board);
+    // determine all null indices of board array 
+    var availableIndices = emptySquareIndices(board);
 
     // recursive base cases  
     if (isWinningMove(board, humanMark)) {
@@ -117,14 +117,14 @@ function minimax(board, playerMark) {
     } else if (isWinningMove(board, AIMark)) {
         // AI wins game 
         return { score: 100 };
-    } else if (availableIndeces.length === 0) {
+    } else if (availableIndices.length === 0) {
         // AI and human tie 
         return { score: 0 };
     }
 
     // create an array of all possible move objects, each of which contains an 
     // index and a score
-    var moves = createMovesArr(board, availableIndeces, playerMark);
+    var moves = createMovesArr(board, availableIndices, playerMark);
 
     // select the index of the best move (from the moves array) by score based on the current player 
     var bestIdx = bestIdxFromMoves(moves, playerMark);
@@ -133,7 +133,7 @@ function minimax(board, playerMark) {
     return moves[bestIdx];
 }
 
-function emptySquareIndeces(arr) {
+function emptySquareIndices(arr) {
     var result = [];
     arr.forEach(function (square, idx) {
         if (!square) result.push(idx);
@@ -148,13 +148,13 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
     }).length;
     if (numMarks < 5) return false;
 
-    var winningIndeces = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+    var winningIndices = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
-    for (var i = 0; i < winningIndeces.length; i++) {
-        var _winningIndeces$i = _slicedToArray(winningIndeces[i], 3),
-            first = _winningIndeces$i[0],
-            second = _winningIndeces$i[1],
-            third = _winningIndeces$i[2];
+    for (var i = 0; i < winningIndices.length; i++) {
+        var _winningIndices$i = _slicedToArray(winningIndices[i], 3),
+            first = _winningIndices$i[0],
+            second = _winningIndices$i[1],
+            third = _winningIndices$i[2];
 
         if (board[first] === playerMark && board[second] === playerMark && board[third] === playerMark) {
             return true;
@@ -164,14 +164,14 @@ var isWinningMove = exports.isWinningMove = function isWinningMove(board, player
     return false;
 };
 
-var createMovesArr = exports.createMovesArr = function createMovesArr(board, availableIndeces, playerMark) {
+var createMovesArr = exports.createMovesArr = function createMovesArr(board, availableIndices, playerMark) {
     var moves = [];
 
-    for (var i = 0; i < availableIndeces.length; i++) {
+    for (var i = 0; i < availableIndices.length; i++) {
         var move = {};
-        move.index = availableIndeces[i];
+        move.index = availableIndices[i];
         // simulate move by current player 
-        board[availableIndeces[i]] = playerMark;
+        board[availableIndices[i]] = playerMark;
 
         // pass simulated board down to next depth with opposing player as current player  
         var result = void 0;
@@ -180,7 +180,7 @@ var createMovesArr = exports.createMovesArr = function createMovesArr(board, ava
         move.score = result.score;
 
         // simualted spot is returned to null before next simulated move
-        board[availableIndeces[i]] = null;
+        board[availableIndices[i]] = null;
         moves.push(move);
     }
     return moves;
@@ -264,6 +264,7 @@ var Root = function (_React$Component) {
         };
         _this.handleScoreUpdate = _this.handleScoreUpdate.bind(_this);
         _this.handleButtonClick = _this.handleButtonClick.bind(_this);
+        _this.renderGameOver = _this.renderGameOver.bind(_this);
         return _this;
     }
 
@@ -292,6 +293,9 @@ var Root = function (_React$Component) {
             }
             this.setState({ AIScore: AIScore, humanScore: humanScore, gameOver: gameOver });
         }
+
+        // render functions 
+
     }, {
         key: 'renderNewGameButton',
         value: function renderNewGameButton() {
@@ -303,6 +307,17 @@ var Root = function (_React$Component) {
                 },
                 'New Game'
             );
+        }
+    }, {
+        key: 'renderGameOver',
+        value: function renderGameOver() {
+            if (this.state.gameOver) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: 'game-over-span' },
+                    'GAME OVER'
+                );
+            }
         }
     }, {
         key: 'render',
@@ -320,8 +335,13 @@ var Root = function (_React$Component) {
                     gameOver: gameOver,
                     updateScore: this.handleScoreUpdate
                 }),
-                _react2.default.createElement(_scoreboard2.default, { AIScore: AIScore, humanScore: humanScore }),
-                this.renderNewGameButton()
+                _react2.default.createElement(_scoreboard2.default, {
+                    AIScore: AIScore,
+                    gameOver: gameOver,
+                    humanScore: humanScore
+                }),
+                this.renderNewGameButton(),
+                this.renderGameOver()
             );
         }
     }]);
@@ -402,7 +422,9 @@ var Board = function (_React$Component) {
             var gameOver = this.props.gameOver;
             var currentPlayer = this.state.currentPlayer;
 
-            if (currentPlayer === 'AI' && !gameOver) this.makeMove();
+            if (currentPlayer === 'AI' && !gameOver) {
+                setTimeout(this.makeMove, 500);
+            }
         }
 
         // handlers 
@@ -500,8 +522,7 @@ exports.default = Board;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+exports.default = ScoreBoard;
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
@@ -509,63 +530,40 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Scoreboard = function (_React$Component) {
-    _inherits(Scoreboard, _React$Component);
-
-    function Scoreboard(props) {
-        _classCallCheck(this, Scoreboard);
-
-        return _possibleConstructorReturn(this, (Scoreboard.__proto__ || Object.getPrototypeOf(Scoreboard)).call(this, props));
-    }
-
-    _createClass(Scoreboard, [{
-        key: "render",
-        value: function render() {
-            return _react2.default.createElement(
-                "div",
-                { className: "scoreboard-div" },
-                _react2.default.createElement(
-                    "div",
-                    { className: "player-score-div" },
-                    _react2.default.createElement(
-                        "span",
-                        null,
-                        "Player:"
-                    ),
-                    _react2.default.createElement(
-                        "span",
-                        { className: "player-score" },
-                        this.props.humanScore
-                    )
-                ),
-                _react2.default.createElement(
-                    "div",
-                    { className: "AI-score-div" },
-                    _react2.default.createElement(
-                        "span",
-                        null,
-                        "Computer:"
-                    ),
-                    _react2.default.createElement(
-                        "span",
-                        { className: "AI-score" },
-                        this.props.AIScore
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Scoreboard;
-}(_react2.default.Component);
-
-exports.default = Scoreboard;
+function ScoreBoard(props) {
+    return _react2.default.createElement(
+        "div",
+        { className: "scoreboard-div" },
+        _react2.default.createElement(
+            "div",
+            { className: "player-score-div" },
+            _react2.default.createElement(
+                "span",
+                null,
+                "Player:"
+            ),
+            _react2.default.createElement(
+                "span",
+                { className: "player-score" },
+                props.humanScore
+            )
+        ),
+        _react2.default.createElement(
+            "div",
+            { className: "AI-score-div" },
+            _react2.default.createElement(
+                "span",
+                null,
+                "Computer:"
+            ),
+            _react2.default.createElement(
+                "span",
+                { className: "AI-score" },
+                props.AIScore
+            )
+        )
+    );
+}
 
 /***/ }),
 

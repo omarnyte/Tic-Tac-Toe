@@ -37,7 +37,7 @@ describe('AI Logic', () => {
             ];
             expect(AILogic.bestMoveIndex(board)).toBe(0)
         });
-    })
+    });
     
     describe('helper methods', () => {
         test('isWinningMove(board, playerMark)', () => {
