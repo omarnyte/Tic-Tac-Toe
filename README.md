@@ -10,9 +10,11 @@
 
 ## Gameplay ##
 The game is simple. You, the human, chooses first. Your objective is to get 3 X's in a row, column, or diagonal. Simply click the empty square you wish to fill.
+
 ![tied game](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/tie.gif)
 
 When you lose the game (sorry--the AI is unbeatable!), you can start a new game by clicking the *New Game* button on the bottom of the screen. 
+
 ![new game](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/new-game.gif)
 
 ## Artificial Intelligence ## 
@@ -110,6 +112,9 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 * The AI logic is fully tested using the [Jest](https://facebook.github.io/jest/) testing framework. 
 * Every React component is tested using [Enzyme](http://airbnb.io/enzyme/). 
 * Together, these frameworks cover 96% of the application's JavaScript.
+
+![test coverage breakdown](github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
+
 
 ## Future Features ## 
 * Allow the user to toggle between playing against the computer and playing against another human player on the same computer. 
