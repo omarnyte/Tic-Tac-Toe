@@ -135,17 +135,17 @@ I'm glad to see that you'd like to help make Tic Tac Toe a better game! Please f
     npm run dev 
     ```
 3. Make your changes.
-4. Write and run tests for any of your changes. This step ensure that your changes do not break the application. 
+4. Write and run tests for any of your changes. This step ensures that your changes do not break the application. 
     ```JavaScript
     // to run all tests: 
     npm test 
 
-    // to check coverage percentage
+    // to check coverage percentage:
     npm run test:coverage
 
     // to run tests while you code:
     npm run test:watch
     ```
-    * Tests are written using [Jest](https://facebook.github.io/jest/) and [Enzyme](http://airbnb.io/enzyme/). For a great introduction to both, please read [How to Test React Components Using Jest.](https://www.sitepoint.com/test-react-components-jest/)
+    * Tests are written using [Jest](https://facebook.github.io/jest/) and [Enzyme](http://airbnb.io/enzyme/). For a great introduction to both, please read [How to Test React Components Using Jest](https://www.sitepoint.com/test-react-components-jest/). The documentation for Jest and Enzyme are also fantastic resources.
 6. Make a pull request. 
-    * If you've made a significant change to the functionality of the game, please make sure you have updated the README to reflect those changes. GIFs of the added functionality are encouraged! 
+    * If you've made a significant change to the functionality of the game, please make sure you have updated the README to reflect those changes. GIFs and/or pictures of the added functionality are encouraged! 
