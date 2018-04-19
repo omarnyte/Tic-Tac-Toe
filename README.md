@@ -103,7 +103,6 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 ![break points animation](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/break-points.gif)
 
 
-
 ## React Component Hierarchy ## 
 * \<App /> 
     * \<ScoreBoard /> 

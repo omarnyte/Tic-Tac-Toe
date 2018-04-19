@@ -37,7 +37,6 @@ export default class Board extends React.Component {
 
     // handlers 
     handleSquareClick(e) {
-        console.dir(e.target.dataset)
         let board = this.state.board.slice();
         let { currentPlayer } = this.state;
         const { gameOver } = this.props;
