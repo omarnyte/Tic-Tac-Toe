@@ -121,3 +121,31 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 ## Future Features ## 
 * Allow the user to toggle between playing against the computer and playing against another human player on the same computer. 
 * Implement a backend to allow two players to play against each other using websockets.
+
+## Contributing ## 
+I'm glad to see that you'd like to help make Tic Tac Toe a better game! Please follow the steps below to contribute.
+
+1. Fork the repo. 
+2. Install dependencies while in the root directory. 
+    ```JavaScript 
+    npm install 
+    ```
+3. Run webpack in watch mode to ensure that your changes are reflected while previewing the app. You can preview a local version of the application by visiting ```<repo location>/Tic-Tac-Toe/index.html``` on your browser.
+    ```JavaScript
+    npm run dev 
+    ```
+3. Make your changes.
+4. Write and run tests for any of your changes. This step ensure that your changes do not break the application. 
+    ```JavaScript
+    // to run all tests: 
+    npm test 
+
+    // to check coverage percentage
+    npm run test:coverage
+
+    // to run tests while you code:
+    npm run test:watch
+    ```
+    * Tests are written using [Jest](https://facebook.github.io/jest/) and [Enzyme](http://airbnb.io/enzyme/). For a great introduction to both, please read [How to Test React Components Using Jest.](https://www.sitepoint.com/test-react-components-jest/)
+6. Make a pull request. 
+    * If you've made a significant change to the functionality of the game, please make sure you have updated the README to reflect those changes. GIFs of the added functionality are encouraged! 
