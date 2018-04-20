@@ -16,7 +16,7 @@ function Square(props) {
             data-idx={ idx }
             onClick={ props.onClick }
         >
-            <span className={`square-span ${status}`}>{ props.mark }</span>
+            <span className={`square-span ${ status }`}>{ props.mark }</span>
             
         </li>
     );

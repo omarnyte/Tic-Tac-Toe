@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { 
     bestMoveIndex, 
@@ -6,7 +7,7 @@ import {
     isWinningMove } from '../../../assets/javascripts/AILogic';
 import Square from '../square/square.jsx';
 
-export default class Board extends React.Component {
+class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -113,6 +114,13 @@ export default class Board extends React.Component {
             </div>
         );
     }
-
 } 
 
+Board.propTypes = {
+    gameOver: PropTypes.bool.isRequired,
+    removeGameOver: PropTypes.func,
+    tieGame: PropTypes.func.isRequired,
+    updateScore: PropTypes.func.isRequired
+}
+
+export default Board;

@@ -261,6 +261,10 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _AILogic = __webpack_require__(/*! ../../../assets/javascripts/AILogic */ "./assets/javascripts/AILogic.js");
 
 var _square = __webpack_require__(/*! ../square/square.jsx */ "./frontend/components/square/square.jsx");
@@ -406,6 +410,13 @@ var Board = function (_React$Component) {
 
     return Board;
 }(_react2.default.Component);
+
+Board.propTypes = {
+    gameOver: _propTypes2.default.bool.isRequired,
+    removeGameOver: _propTypes2.default.func,
+    tieGame: _propTypes2.default.func.isRequired,
+    updateScore: _propTypes2.default.func.isRequired
+};
 
 exports.default = Board;
 
