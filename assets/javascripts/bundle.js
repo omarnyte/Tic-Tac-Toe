@@ -568,38 +568,48 @@ exports.default = Game;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = ScoreBoard;
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function ScoreBoard(props) {
     return _react2.default.createElement(
-        "div",
-        { className: "scoreboard-div" },
+        'div',
+        { className: 'scoreboard-div' },
         _react2.default.createElement(
-            "div",
-            { className: "player-score-div" },
+            'div',
+            { className: 'player-score-div' },
             _react2.default.createElement(
-                "span",
-                { className: "player-score" },
-                "Player: " + props.humanScore
+                'span',
+                { className: 'player-score' },
+                'Player: ' + props.humanScore
             )
         ),
         _react2.default.createElement(
-            "div",
-            { className: "AI-score-div" },
+            'div',
+            { className: 'AI-score-div' },
             _react2.default.createElement(
-                "span",
-                { className: "AI-score" },
-                "Computer: " + props.AIScore
+                'span',
+                { className: 'AI-score' },
+                'Computer: ' + props.AIScore
             )
         )
     );
 }
+
+ScoreBoard.propTypes = {
+    AIScore: _propTypes2.default.number.isRequired,
+    humanScore: _propTypes2.default.number.isRequired
+};
+
+exports.default = ScoreBoard;
 
 /***/ }),
 
