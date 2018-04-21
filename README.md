@@ -112,7 +112,7 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 ## Testing ##
 * The AI logic is fully tested using the [Jest](https://facebook.github.io/jest/) testing framework. 
 * Every React component is tested using [Enzyme](http://airbnb.io/enzyme/). 
-* Together, these frameworks cover 96% of the application's JavaScript.
+* Together, these frameworks cover 99% of the application's JavaScript.
 
 
 ![test coverage breakdown](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
