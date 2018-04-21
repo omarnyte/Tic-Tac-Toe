@@ -6,7 +6,7 @@ import Board from '../board.jsx';
 describe('Board component', () => {
     test('initial Board is mounted without any marks', () => {
         const wrapper = shallow(
-            <Board gameOver="false" />
+            <Board gameOver={false} removeGameOver={jest.fn()} tieGame={jest.fn()} updateScore={jest.fn()} />
         );
         const emptyBoard = [
             null, null, null, null, null, null, null, null, null
@@ -17,8 +17,8 @@ describe('Board component', () => {
     describe('handlers', () => {
         describe('handleSquareClick(e)', () => {
             test('marks an empty square', ()=> {
-                const wrapper = mount(
-                    <Board />
+                const wrapper = shallow(
+                    <Board gameOver={false} removeGameOver={jest.fn()} tieGame={jest.fn()} updateScore={jest.fn()} />
                 );
                 const event = {
                     target: {
@@ -36,26 +36,29 @@ describe('Board component', () => {
                 expect(wrapper.state().board[event.target.dataset.idx]).toBe('X');
             });
 
-            // test('changes the currentPlayer to AI after clicking', ()=> {
-            //     const updateScore = jest.fn();
-            //     const wrapper = mount(
-            //         <Board updateScore={ updateScore } />
-            //     );
-            //     const event = {
-            //         target: {
-            //             dataset: {
-            //                 idx: "0"
-            //             }
-            //         }
-            //     }
-            //     const board = [
-            //         null, 'X', 'X', 'O', 'O', null, null, null, null
-            //     ]
-            //     const instance = wrapper.instance();
+            test('updates score after win', ()=> {
+                const updateScore = jest.fn();
+                const wrapper = shallow(
+                    <Board gameOver={ false } removeGameOver ={ jest.fn() } tieGame={ jest.fn() } updateScore={ updateScore } />
+                );
+                const event = {
+                    target: {
+                        dataset: {
+                            idx: '5'
+                        }
+                    }
+                }
+                const board = [
+                    'O', 'X', 'X', 
+                    'O', 'O', null, 
+                    null, null, 'X'
+                ]
+                const instance = wrapper.instance();
+                wrapper.setState({ board });
                 
-            //     instance.handleSquareClick(event);
-            //     expect(updateScore).toHaveBeenCalled();
-            // });
+                instance.handleSquareClick(event);
+                expect(updateScore).toBeCalledWith('human');
+            });
 
             // test('does not update scores after tying', () => {
             //     const updateScore = jest.fn();
@@ -83,10 +86,7 @@ describe('Board component', () => {
             const removeGameOver = jest.fn();
             const updateScore = jest.fn();
             const wrapper = shallow(
-                <Board 
-                    removeGameOver={ removeGameOver } 
-                    updateScore = { updateScore} 
-                />
+                <Board gameOver={false} removeGameOver={removeGameOver} tieGame={jest.fn()} updateScore={updateScore} />
             );
             const instance = wrapper.instance();
             const emptyBoard = [
