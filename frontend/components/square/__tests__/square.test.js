@@ -7,7 +7,7 @@ describe('Square component', () => {
     describe('Square components render correctly', () => {
         test('squares passed null as a mark prop do not render a mark', () => {
             const squareWrapper = shallow(
-                <Square key={ 0 } idx={ 0 } mark={ null } />
+                <Square key={ 0 } idx={ 0 } mark={ null } onClick={ jest.fn() }/>
             );
             const span = squareWrapper.find('.square-span');
             expect(span.text()).toBe('');
@@ -15,10 +15,10 @@ describe('Square component', () => {
     
         test('squares passed a mark render that mark', () => {
             const xSquareWrapper = shallow(
-                <Square key={ 0 } idx={ 0 } mark={ 'X' } />
+                <Square key={0} idx={0} mark={'X'} onClick={jest.fn()}/>
             );
             const oSquareWrapper = shallow(
-                <Square key={ 0 } idx={ 0 } mark={ 'O' } />
+                <Square key={0} idx={0} mark={'O'} onClick={jest.fn()}/>
             );
             const xSpan = xSquareWrapper.find('.square-span');
             const oSpan = oSquareWrapper.find('.square-span');
@@ -32,7 +32,7 @@ describe('Square component', () => {
         test("top row Square li's receive the 'top' class", () => {
             for (let i = 0; i <= 2; i++) {
                 const squareWrapper = shallow(
-                    <Square key={ i } idx={ i } mark={null} />
+                    <Square key={i} idx={i} mark={null} onClick={jest.fn()}/>
                 );
                 const li = squareWrapper.find('.square-li');
                 expect(li.hasClass('top')).toBe(true);
@@ -42,7 +42,7 @@ describe('Square component', () => {
         test("bottom row Square li's receive the 'bottom' class", () => {
             for (let i = 6; i <= 8; i++) {
                 const squareWrapper = shallow(
-                    <Square key={ i } idx={ i } mark={null} />
+                    <Square key={i} idx={i} mark={null} onClick={jest.fn()}/>
                 );
                 const li = squareWrapper.find('.square-li');
                 expect(li.hasClass('bottom')).toBe(true);
@@ -53,7 +53,7 @@ describe('Square component', () => {
             const leftIndices = [0, 3, 6];
             for (let i = 0; i < leftIndices.length; i++) {
                 const squareWrapper = shallow(
-                    <Square key={ leftIndices[i] } idx={ leftIndices[i] } mark={null} />
+                    <Square key={leftIndices[i]} idx={leftIndices[i]} mark={null} onClick={jest.fn()}/>
                 );
                 const li = squareWrapper.find('.square-li');
                 expect(li.hasClass('left')).toBe(true);
@@ -64,7 +64,7 @@ describe('Square component', () => {
             const rightIndices = [2, 5, 8];
             for (let i = 0; i < rightIndices.length; i++) {
                 const squareWrapper = shallow(
-                    <Square key={ rightIndices[i] } idx={ rightIndices[i] } mark={null} />
+                    <Square key={rightIndices[i]} idx={rightIndices[i]} mark={null} onClick={jest.fn()}/>
                 );
                 const li = squareWrapper.find('.square-li');
                 expect(li.hasClass('right')).toBe(true);
@@ -76,7 +76,7 @@ describe('Square component', () => {
         test('call the onClick function when a square is clicked', () => {
             const onClick = jest.fn();
             const squareWrapper = shallow(
-                <Square key={ 0 } idx={ 0 } mark={ null } onClick={ onClick } />
+                <Square key={ 0 } idx={ 0 } mark={ null } onClick={ onClick }/>
             );
     
             squareWrapper.find('.square-li').simulate('click');
