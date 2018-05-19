@@ -118,7 +118,7 @@ The board is styled entirely with pure CSS. Breakpoints are used to ensure that 
 ![test coverage breakdown](https://github.com/omarnyte/Tic-Tac-Toe/blob/master/assets/images/test-coverage.png)
 
 
-## Future Features ## 
+## Pending Features ## 
 * Allow the user to toggle between playing against the computer and playing against another human player on the same computer. 
 * Implement a backend to allow two players to play against each other using websockets.
 
